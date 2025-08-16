@@ -1,0 +1,166 @@
+.navbar {
+    background-color: #003580;
+}
+
+        .navbar-brand img {
+            height: 40px;
+            /* Ajuste de espaçamento para melhor alinhamento e destaque */
+            margin-right: 15px;
+            /* Pequeno efeito de sombra para aumentar a visibilidade da logo */
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card-title {
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background-color: #003580;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #002a66;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Estilos específicos para os botões da Hero Section */
+        .btn-hero-primary {
+            background-color: white;
+            color: #003580;
+            border: 2px solid white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600; /* Negrito para mais destaque */
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-hero-primary:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #002a66;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-hero-outline {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600; /* Negrito para mais destaque */
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-hero-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            /* color: #003580; */ /* Descomentar se quiser inverter a cor */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .bi {
+            font-size: 2rem;
+            color: #003580;
+        }
+
+        /* Estilos adicionais para o dashboard */
+        .metric-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .bg-primary-light {
+            background-color: #e3f2fd;
+        }
+
+        .bg-success-light {
+            background-color: #e8f5e9;
+        }
+
+        .bg-warning-light {
+            background-color: #fff3e0;
+        }
+
+        .bg-danger-light {
+            background-color: #ffebee;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        /* Hero Section Melhorada */
+        .hero-section {
+            background: linear-gradient(135deg, #003580 0%, #002a66 100%);
+            color: white;
+            padding: 120px 0; /* Aumento do padding vertical */
+            text-align: center;
+        }
+
+        .hero-section .display-4 {
+            font-weight: 800; /* Negrito mais forte */
+            margin-bottom: 25px;
+            font-size: 3.5rem; /* Ajuste de tamanho */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Sombra de texto para destaque */
+        }
+
+        .hero-section .lead {
+            font-size: 1.3rem; /* Ajuste de tamanho */
+            font-weight: 400;
+            opacity: 0.95; /* Opacidade ligeiramente maior */
+            max-width: 900px; /* Limita a largura do texto um pouco mais */
+            margin: 0 auto 40px auto; /* Aumento da margem inferior */
+        }
+
+        /* Espaçamento entre botões */
+        .hero-buttons {
+             gap: 20px; /* Aumento do espaço entre os botões */
+             justify-content: center;
+        }
+
+         /* Ajustes feitos para telas menores */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 80px 0; /* Redução do padding em mobile */
+            }
+            .hero-section .display-4 {
+                font-size: 2.5rem; /* Redução do tamanho da fonte */
+            }
+            .hero-section .lead {
+                font-size: 1.1rem; /* Redução do tamanho da fonte */
+            }
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                 gap: 15px; /* Redução do gap em mobile */
+            }
+            .hero-buttons .btn {
+                width: 90%; /* Largura dos botões em telas pequenas */
+                padding: 14px 20px; /* Ajuste de padding */
+            }
+            .navbar-brand img {
+                margin-right: 10px; /* Ajuste menor em mobile */
+            }
+        }
+    

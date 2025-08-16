@@ -6,10 +6,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap 5 CSS -->
+    <!-- CORREÇÃO 1: Remover espaços extras no final do href -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Ícones do Bootstrap -->
+    <!-- CORREÇÃO 1: Remover espaços extras no final do href -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- CORREÇÃO 2: Adicionar link para seu CSS personalizado -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+
+    <!-- Seus estilos específicos para esta página (se houver) podem vir aqui ou em style.css -->
+    <!-- <style> ... </style> -->
+
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <!-- CORREÇÃO 5: Link para a Home usando url_for -->
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('main.index') }}">
+                <!-- CORREÇÃO 4: Imagem da logo usando url_for -->
+                <img src="{{ url_for('static', filename='imagens/logo-bonsono.png') }}" alt="Logo BonSono" width="40" height="40">
+                Plataforma de Gestão da Qualidade
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Links para seções da página atual ou outras páginas -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.index') }}#laudo-tecnico">Laudo Técnico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Controle de Produção</a> <!-- Página atual -->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.index') }}#lean-six-sigma">Lean Six Sigma</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.index') }}#analise-preditiva">Análise Preditiva</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.index') }}#dashboard">Dashboard</a>
+                    </li>
+                </ul>
+                <div class="d-flex ms-3">
+                    <!-- CORREÇÃO 5: Links para rotas do Flask usando url_for -->
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light me-2">Login</a>
+                    <a href="{{ url_for('auth.registrar') }}" class="btn btn-primary">Registrar</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="container main-content">
+        <h1 class="text-center mb-5">Controle de Produção</h1>
 
     <style>
         /* Estilos específicos para esta página */
@@ -3764,13 +3819,13 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS Bundle -->
+        <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Script para preencher dinamicamente os campos de produtos e estoque -->
+    <!-- Script para conectar o frontend ao backend Flask -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- Preencher campos de produtos usados no cadastro de bloco ---
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Código existente para preencher campos dinamicamente ---
             const produtos = [
                 "Poliol", "Copol", "Cloreto", "TDI", "Silicone", "Amina", "Estanho", "Adipur",
                 "Vermelho", "Azul", "Preto", "Amarelo", "Laranja", "Violeta", "Verde",
@@ -3788,28 +3843,28 @@
                 containerProdutos.appendChild(colDiv);
             });
 
-            // --- Preencher campos de estoque na aba de edição ---
             const containerEstoque = document.getElementById('estoque-edit-container');
             produtos.forEach(produto => {
-                 const rowDiv = document.createElement('div');
-                 rowDiv.className = 'row g-3 mb-2 align-items-end border-bottom pb-2';
-                 rowDiv.innerHTML = `
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'row g-3 mb-2 align-items-end border-bottom pb-2';
+                rowDiv.innerHTML = `
                     <div class="col-md-1">
                         <label class="form-label fw-bold">${produto}</label>
                     </div>
                     <div class="col-md-5">
                         <label for="estoque-${produto}" class="form-label">Estoque (kg)</label>
                         <input type="number" class="form-control estoque-input" id="estoque-${produto}" placeholder="Estoque atual" step="1" data-produto="${produto}" data-tipo="atual">
+                        <!-- Input hidden para armazenar o ID do item de estoque, se carregado -->
+                        <input type="hidden" class="estoque-id" id="estoque-id-${produto}" data-produto="${produto}">
                     </div>
                     <div class="col-md-5">
                         <label for="minimo-${produto}" class="form-label">Estoque Mínimo (kg)</label>
                         <input type="number" class="form-control estoque-input" id="minimo-${produto}" placeholder="Estoque mínimo" step="1" data-produto="${produto}" data-tipo="minimo">
                     </div>
-                 `;
-                 containerEstoque.appendChild(rowDiv);
+                `;
+                containerEstoque.appendChild(rowDiv);
             });
 
-            // --- Preencher select de produtos para o gráfico ---
             const selectGrafico = document.getElementById('produto-grafico-select');
             produtos.forEach(produto => {
                 const option = document.createElement('option');
@@ -3818,13 +3873,314 @@
                 selectGrafico.appendChild(option);
             });
 
-            // --- Definir data atual no campo de data ---
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('bloco-data').value = today;
+            // --- Fim do código existente ---
 
-            // --- Placeholder para funcionalidades futuras ---
-            // Aqui você adicionaria chamadas AJAX para seu backend para buscar/carregar dados reais
-            console.log("Seção 'Controle de Produção' carregada. Backend necessário para funcionalidade completa.");
+            // --- NOVAS FUNÇÕES DE CONEXÃO COM O BACKEND ---
+
+            // --- Função para mostrar mensagens de alerta na página ---
+            function mostrarMensagem(mensagem, tipo = 'info') {
+                // Cria um elemento de alerta do Bootstrap
+                const alertPlaceholder = document.getElementById('alert-placeholder'); // Certifique-se de ter um div com este id no seu HTML
+                if (!alertPlaceholder) {
+                    console.warn('Elemento com id "alert-placeholder" não encontrado para mostrar mensagens.');
+                    alert(mensagem); // Fallback para alert do navegador
+                    return;
+                }
+
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = `
+                    <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+                        ${mensagem}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                alertPlaceholder.innerHTML = ''; // Limpa mensagens anteriores
+                alertPlaceholder.appendChild(wrapper);
+                // Rolagem suave para o topo da seção ou para a mensagem
+                alertPlaceholder.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            // --- 1. Conectar o Formulário "Cadastrar Bloco" ---
+            const formCadastroBloco = document.getElementById('formulario-bloco');
+            if (formCadastroBloco) {
+                formCadastroBloco.addEventListener('submit', function (event) {
+                    event.preventDefault(); // Impede o envio padrão do formulário
+
+                    // Coleta dados do formulário
+                    const blocoId = document.getElementById('bloco-id').value.trim();
+                    const blocoData = document.getElementById('bloco-data').value;
+                    const blocoTipo = document.getElementById('bloco-tipo').value;
+                    const blocoDensidade = document.getElementById('bloco-densidade').value;
+                    const blocoConformidade = document.querySelector('input[name="bloco-conformidade"]:checked').value;
+                    const blocoObs = document.getElementById('bloco-obs').value;
+
+                    if (!blocoId) {
+                         mostrarMensagem('Por favor, preencha o ID do Bloco.', 'warning');
+                         return;
+                    }
+
+                    // Coleta produtos usados
+                    const produtosUsados = {};
+                    document.querySelectorAll('.produto-usado-input').forEach(input => {
+                        if (input.value && parseFloat(input.value) > 0) {
+                            const nomeProduto = input.dataset.produto;
+                            produtosUsados[nomeProduto] = input.value;
+                        }
+                    });
+
+                    // Prepara os dados para envio
+                    const dados = {
+                        bloco_id: blocoId,
+                        data_producao: blocoData,
+                        tipo_espuma: blocoTipo,
+                        densidade_real: blocoDensidade,
+                        conformidade: blocoConformidade,
+                        observacoes: blocoObs,
+                        produtos_usados: produtosUsados
+                    };
+
+                    // Desabilita o botão enquanto envia
+                    const submitButton = formCadastroBloco.querySelector('button[type="submit"]');
+                    const originalButtonText = submitButton.textContent;
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Salvando...';
+
+                    // Envia os dados via POST para a API Flask
+                    fetch('/producao/api/blocos', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // Se estiver usando proteção CSRF, adicione o token aqui
+                        },
+                        body: JSON.stringify(dados)
+                    })
+                    .then(response => {
+                         if (response.ok) {
+                            return response.json();
+                        } else {
+                            // Tenta ler a mensagem de erro
+                            return response.json().then(errData => {
+                                // Se não houver mensagem de erro no JSON, usa o status text
+                                const errorMsg = errData.message || `Erro ${response.status}: ${response.statusText}`;
+                                throw new Error(errorMsg);
+                            }).catch(e => {
+                                // Se falhar ao ler o JSON de erro, lança um erro genérico
+                                 throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                            });
+                        }
+                    })
+                    .then(data => {
+                        // Sucesso
+                        mostrarMensagem(data.message || 'Bloco cadastrado com sucesso!', 'success');
+                        formCadastroBloco.reset();
+                        document.getElementById('bloco-data').value = today; // Reseta a data
+                    })
+                    .catch(error => {
+                        // Erro
+                        console.error('Erro ao cadastrar bloco:', error);
+                        mostrarMensagem(`Erro ao cadastrar bloco: ${error.message}`, 'danger');
+                    })
+                    .finally(() => {
+                        // Reabilita o botão
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalButtonText;
+                    });
+                });
+            }
+
+            // --- 2. Conectar o Formulário "Editar Estoque" ---
+            const formEditarEstoque = document.getElementById('formulario-estoque');
+            if (formEditarEstoque) {
+                formEditarEstoque.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    // Coleta dados do estoque
+                    const dadosEstoque = [];
+                    // Itera pelos produtos para coletar os valores dos inputs
+                    produtos.forEach(produto => {
+                        const estoqueInput = document.getElementById(`estoque-${produto}`);
+                        const minimoInput = document.getElementById(`minimo-${produto}`);
+                        const idInput = document.getElementById(`estoque-id-${produto}`); // Input hidden com o ID
+
+                        if (estoqueInput && minimoInput) {
+                            const item = {
+                                // Se tiver um ID carregado, envia. Senão, o backend pode decidir criar ou ignorar.
+                                // Idealmente, o estoque já estaria carregado com IDs.
+                                id: idInput && idInput.value ? parseInt(idInput.value) : null,
+                                nome_produto: produto,
+                                quantidade_estoque_kg: parseFloat(estoqueInput.value) || 0,
+                                estoque_minimo_kg: parseFloat(minimoInput.value) || 0
+                            };
+                            // Só envia se tiver ID ou se os valores forem diferentes de zero/nulos
+                            // Para simplificar, vamos enviar todos, e o backend decide.
+                            dadosEstoque.push(item);
+                        }
+                    });
+
+                    if (dadosEstoque.length === 0) {
+                        mostrarMensagem('Nenhum item de estoque encontrado para atualizar.', 'warning');
+                        return;
+                    }
+
+                    // Desabilita o botão enquanto envia
+                    const submitButton = formEditarEstoque.querySelector('button[type="submit"]');
+                    const originalButtonText = submitButton.textContent;
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Salvando...';
+
+                    // Envia os dados via PUT para a API Flask
+                    fetch('/producao/api/estoque', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(dadosEstoque) // Envia o array de itens
+                    })
+                    .then(response => {
+                         if (response.ok) {
+                            return response.json();
+                        } else {
+                            return response.json().then(errData => {
+                                const errorMsg = errData.message || `Erro ${response.status}: ${response.statusText}`;
+                                throw new Error(errorMsg);
+                            }).catch(e => {
+                                 throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                            });
+                        }
+                    })
+                    .then(data => {
+                        mostrarMensagem(data.message || 'Estoque atualizado com sucesso!', 'success');
+                        // Opcional: Recarregar os dados da aba 'Estoque Atual'
+                        // carregarEstoqueAtual(); // Se criar essa função
+                    })
+                    .catch(error => {
+                        console.error('Erro ao atualizar estoque:', error);
+                        mostrarMensagem(`Erro ao atualizar estoque: ${error.message}`, 'danger');
+                    })
+                    .finally(() => {
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalButtonText;
+                    });
+                });
+            }
+
+            // --- 3. Carregar dados na aba "Estoque Atual" ---
+            // Função para carregar e exibir o estoque atual
+            function carregarEstoqueAtual() {
+                const listaEstoque = document.getElementById('lista-estoque');
+                if (!listaEstoque) return; // Se a aba não existir, não faz nada
+
+                // Mostra um indicador de carregamento
+                listaEstoque.innerHTML = '<p class="text-center text-muted">Carregando estoque...</p>';
+
+                fetch('/producao/api/estoque')
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                    }
+                })
+                .then(data => {
+                    listaEstoque.innerHTML = ''; // Limpa o conteúdo atual
+                    if (data.length === 0) {
+                        listaEstoque.innerHTML = '<p class="text-center text-muted">Nenhum item em estoque.</p>';
+                        return;
+                    }
+                    data.forEach(item => {
+                        const divItem = document.createElement('div');
+                        divItem.className = 'mb-2 p-2 rounded';
+                        divItem.style.backgroundColor = item.abaixo_do_minimo ? '#ffebee' : '#e8f5e9'; // Vermelho/verde claro
+                        divItem.innerHTML = `
+                            <strong>${item.nome_produto}</strong>:
+                            ${item.quantidade_estoque_kg.toFixed(2)} kg
+                            ${item.abaixo_do_minimo ? '<span class="badge bg-danger ms-2">Abaixo do mínimo!</span>' : ''}
+                            <br><small class="text-muted">Mínimo: ${item.estoque_minimo_kg.toFixed(2)} kg</small>
+                        `;
+                        listaEstoque.appendChild(divItem);
+
+                        // --- Atualiza os inputs na aba "Editar Estoque" com os dados carregados ---
+                        // Isso é útil para que o usuário veja os valores atuais antes de editar
+                        const estoqueInput = document.getElementById(`estoque-${item.nome_produto}`);
+                        const minimoInput = document.getElementById(`minimo-${item.nome_produto}`);
+                        const idInput = document.getElementById(`estoque-id-${item.nome_produto}`); // Input hidden
+                        if (estoqueInput) estoqueInput.value = item.quantidade_estoque_kg.toFixed(2);
+                        if (minimoInput) minimoInput.value = item.estoque_minimo_kg.toFixed(2);
+                        if (idInput) idInput.value = item.id; // Armazena o ID do item de estoque
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar estoque:', error);
+                    listaEstoque.innerHTML = `<p class="text-center text-danger">Erro ao carregar estoque: ${error.message}</p>`;
+                });
+            }
+
+            // Adiciona um listener para quando a aba 'Estoque Atual' for mostrada
+            const estoqueAtualTab = document.getElementById('estoque-atual-tab');
+            if (estoqueAtualTab) {
+                // 'shown.bs.tab' é um evento do Bootstrap disparado após a aba ser totalmente exibida
+                estoqueAtualTab.addEventListener('shown.bs.tab', carregarEstoqueAtual);
+                // Carrega uma vez no início, se desejar
+                // carregarEstoqueAtual();
+            }
+
+            // --- 4. Carregar dados na aba "Histórico e Gráficos" ---
+            // Função para carregar e exibir o histórico de blocos
+            function carregarHistorico() {
+                const tbody = document.querySelector('#tabela-historico tbody');
+                const exportarBtn = document.getElementById('exportar-excel-btn');
+                if (!tbody) return;
+
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Carregando histórico...</td></tr>';
+                if (exportarBtn) exportarBtn.disabled = true;
+
+                fetch('/producao/api/blocos')
+                .then(response => {
+                     if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                    }
+                })
+                .then(data => {
+                    tbody.innerHTML = ''; // Limpa o conteúdo atual
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum bloco cadastrado.</td></tr>';
+                        return;
+                    }
+                    data.forEach(bloco => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${bloco.bloco_id}</td>
+                            <td>${bloco.data_producao}</td>
+                            <td>${bloco.tipo_espuma}</td>
+                            <td>${bloco.densidade_real.toFixed(2)}</td>
+                            <td><span class="badge bg-${bloco.conformidade === 'Conforme' ? 'success' : 'danger'}">${bloco.conformidade}</span></td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    if (exportarBtn) exportarBtn.disabled = false; // Habilita o botão de exportar se houver dados
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar histórico:', error);
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Erro ao carregar histórico: ${error.message}</td></tr>`;
+                    if (exportarBtn) exportarBtn.disabled = true;
+                });
+            }
+
+            // Adiciona um listener para quando a aba 'Histórico' for mostrada
+            const historicoTab = document.getElementById('historico-tab');
+            if (historicoTab) {
+                historicoTab.addEventListener('shown.bs.tab', carregarHistorico);
+                // Carrega uma vez no início, se desejar
+                // carregarHistorico();
+            }
+
+            // --- Fim das NOVAS FUNÇÕES ---
+
+            console.log("Scripts de conexão com o backend carregados.");
         });
     </script>
 </body>

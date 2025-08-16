@@ -7,185 +7,23 @@
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Ícones do Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <style>
-        .navbar {
-            background-color: #003580;
-        }
+    <!-- Seu CSS Personalizado (Link para o arquivo externo) -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 
-        .navbar-brand img {
-            height: 40px;
-            /* Ajuste de espaçamento para melhor alinhamento e destaque */
-            margin-right: 15px;
-            /* Pequeno efeito de sombra para aumentar a visibilidade da logo */
-            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
-        }
-
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
-        }
-
-        .card:hover {
-            transform: scale(1.02);
-        }
-
-        .card-title {
-            font-weight: 600;
-        }
-
-        .btn-primary {
-            background-color: #003580;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #002a66;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Estilos específicos para os botões da Hero Section */
-        .btn-hero-primary {
-            background-color: white;
-            color: #003580;
-            border: 2px solid white;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: 600; /* Negrito para mais destaque */
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-hero-primary:hover {
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #002a66;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-hero-outline {
-            background-color: transparent;
-            border: 2px solid white;
-            color: white;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: 600; /* Negrito para mais destaque */
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-hero-outline:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            /* color: #003580; */ /* Descomentar se quiser inverter a cor */
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .bi {
-            font-size: 2rem;
-            color: #003580;
-        }
-
-        /* Estilos adicionais para o dashboard */
-        .metric-card {
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .bg-primary-light {
-            background-color: #e3f2fd;
-        }
-
-        .bg-success-light {
-            background-color: #e8f5e9;
-        }
-
-        .bg-warning-light {
-            background-color: #fff3e0;
-        }
-
-        .bg-danger-light {
-            background-color: #ffebee;
-        }
-
-        section {
-            padding: 60px 0;
-        }
-
-        /* Hero Section Melhorada */
-        .hero-section {
-            background: linear-gradient(135deg, #003580 0%, #002a66 100%);
-            color: white;
-            padding: 120px 0; /* Aumento do padding vertical */
-            text-align: center;
-        }
-
-        .hero-section .display-4 {
-            font-weight: 800; /* Negrito mais forte */
-            margin-bottom: 25px;
-            font-size: 3.5rem; /* Ajuste de tamanho */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Sombra de texto para destaque */
-        }
-
-        .hero-section .lead {
-            font-size: 1.3rem; /* Ajuste de tamanho */
-            font-weight: 400;
-            opacity: 0.95; /* Opacidade ligeiramente maior */
-            max-width: 900px; /* Limita a largura do texto um pouco mais */
-            margin: 0 auto 40px auto; /* Aumento da margem inferior */
-        }
-
-        /* Espaçamento entre botões */
-        .hero-buttons {
-             gap: 20px; /* Aumento do espaço entre os botões */
-             justify-content: center;
-        }
-
-         /* Ajustes para telas menores */
-        @media (max-width: 768px) {
-            .hero-section {
-                padding: 80px 0; /* Redução do padding em mobile */
-            }
-            .hero-section .display-4 {
-                font-size: 2.5rem; /* Redução do tamanho da fonte */
-            }
-            .hero-section .lead {
-                font-size: 1.1rem; /* Redução do tamanho da fonte */
-            }
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-                 gap: 15px; /* Redução do gap em mobile */
-            }
-            .hero-buttons .btn {
-                width: 90%; /* Largura dos botões em telas pequenas */
-                padding: 14px 20px; /* Ajuste de padding */
-            }
-            .navbar-brand img {
-                margin-right: 10px; /* Ajuste menor em mobile */
-            }
-        }
-    </style>
 </head>
 <body class="bg-light">
 
-    <!-- Navbar com Logo -->
+    <!-- Navbar com Logo da empresa -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../imagens/logo-bonsono.png" alt="Logo BonSono" width="40" height="40">
+            <!-- Link para a Home usando url_for -->
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('main.index') }}">
+                <!-- Imagem da logo usando url_for -->
+                <img src="{{ url_for('static', filename='imagens/logo-bonsono.png') }}" alt="Logo BonSono" width="40" height="40">
                 Plataforma de Gestão da Qualidade
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -193,6 +31,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <!-- Links para seções da página atual (#) -->
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
@@ -213,8 +52,9 @@
                     </li>
                 </ul>
                 <div class="d-flex ms-3">
-                    <a href="login.html" class="btn btn-outline-light me-2">Login</a>
-                    <a href="registrar.html" class="btn btn-primary">Registrar</a>
+                    <!-- CORREÇÃO: Links para rotas do Flask usando url_for -->
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light me-2">Login</a>
+                    <a href="{{ url_for('auth.registrar') }}" class="btn btn-primary">Registrar</a>
                 </div>
             </div>
         </div>
@@ -227,7 +67,7 @@
             <p class="lead">Uma solução integrada para qualidade, produção e melhoria contínua utilizando Lean Six Sigma e análise de dados</p>
             <div class="d-flex hero-buttons">
                 <a href="#modulos" class="btn btn-hero-primary btn-lg">Explorar Módulos</a>
-                <a href="login.html" class="btn btn-hero-outline btn-lg">Acessar Plataforma</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-hero-outline btn-lg">Acessar Plataforma</a> <!-- Link atualizado -->
             </div>
         </div>
     </section>
@@ -247,7 +87,8 @@
                         <div class="bi bi-file-earmark-text mb-3"></div>
                         <h5 class="card-title">Laudo Técnico</h5>
                         <p class="card-text">Preenchimento automático de laudos com base nas variáveis de produção</p>
-                        <a href="laudo-tecnico.html" class="btn btn-primary">Acessar Laudos</a>
+                        <!-- CORREÇÃO: Link temporário para arquivo HTML direto. Deve ser atualizado para usar url_for quando a rota estiver criada -->
+                         <a href="{{ url_for('main.laudo_tecnico') }}" class="btn btn-primary">Acessar Laudos</a>
                     </div>
                 </div>
 
@@ -257,7 +98,8 @@
                         <div class="bi bi-graph-up-arrow mb-3"></div>
                         <h5 class="card-title">Controle de Produção</h5>
                         <p class="card-text">Registro contínuo das variáveis de processo e tipos de espuma fabricados</p>
-                        <a href="controle-producao.html" class="btn btn-primary">Acessar Produção</a>
+                        <!-- CORREÇÃO: Link temporário para arquivo HTML direto. Deve ser atualizado para usar url_for quando a rota estiver criada -->
+                        <a href="{{ url_for('main.controle_producao') }}" class="btn btn-primary">Acessar Produção</a>
                     </div>
                 </div>
 
@@ -267,7 +109,7 @@
                         <div class="bi bi-diagram-3 mb-3"></div>
                         <h5 class="card-title">Lean Six Sigma</h5>
                         <p class="card-text">Ferramentas para mapeamento e resolução de problemas</p>
-                        <a href="#" class="btn btn-primary">Acessar Lean</a>
+                        <a href="{{ url_for('main.lean') }}" class="btn btn-primary">Acessar Lean</a>
                     </div>
                 </div>
 
@@ -435,7 +277,10 @@
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
+    <!-- Seu JavaScript Personalizado -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
     <script>
         // Script para mostrar/esconder senha (será implementado na página de login)
         document.addEventListener('DOMContentLoaded', function() {
@@ -454,5 +299,7 @@
             });
         });
     </script>
+
 </body>
 </html>
+    
