@@ -1,0 +1,60 @@
+
+  {% extends "template.html" %} <!--  Informa que essa pagina vai trazer (ser uma extensão) da página template.html -->
+  {% block conteudo %} <!-- Informa que, como definido no arqui template, sera possivel inserir o conteudo abaixo no local informado. -->
+
+  <div class="tela">
+      <div class="container" >
+              <h1 class="container">A fazer</h1>
+
+              <form  action="/add" method="post" >
+                  <div class="col">
+                      
+                      <div class="input-group mb-3">
+                          <input type="text" class="form-control" placeholder="Preciso fazer ..." aria-label="Recipient's username" aria-describedby="button-addon2" name="name" >
+                          <div class="input-group-append">
+                          <button class="btn btn-primary" type="submit" id="button-addon2">Add</button>
+                          </div>
+                      </div>
+                  </div>
+
+                  {% with messages = get_flashed_messages() %}
+          {% if messages %}
+              <ul class="flash-messages">
+                  {% for message in messages %}
+                      <li>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+
+          {% endif %}
+      {% endwith %}
+
+                  
+              </form>
+
+              
+              <table class="table table-hover text-center" >
+
+                  <tbody>
+                  {% for todo in todo_list %}
+                  <tr>
+                      <td class="task">{{todo.task_id }}</td>
+                      <td class="task">{{ todo.name }}</td>
+
+                      {% if todo.done == False %}
+                      <td><label class="task-status-notdone">Not done</label></td>
+                      {% else %}
+                      <td><label class="task-status-done" >Done</label></td>
+                      {% endif %}
+
+                      
+                      <td><a  href="/update/{{ todo.task_id }}" class="btn btn-warning">Update</a></td>
+                      <td><a  href="/delete/{{ todo.task_id }}" class="btn btn-danger">Delete</a></td>
+                      <td><a  href="/editar/{{ todo.task_id }}" class="btn btn-info">Edit</a></td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+          
+      </div>
+  </div>
+  {% endblock %}

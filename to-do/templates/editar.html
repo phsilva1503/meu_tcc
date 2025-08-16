@@ -1,0 +1,23 @@
+
+
+{% extends 'template.html' %}
+{%  block conteudo %}
+<div class="tela">
+    <div class="container">
+
+        
+        <div class="d-flex align-items-center justify-content-center">
+            <form method="POST" action="/atualizar/{{ todo_id }}">
+                <div class="col">
+                    <label for="name">To-do:</label>
+                    <input type="form-control form-control-lg" id="name" name="name" value="{{ todo.name }}"><br><br>
+                    <button class="btn btn-lg btn-primary"  type="submit" value="atualizar" >Atualizar</button>
+                    <a class="btn btn-lg btn btn-danger" href="{{ url_for('index') }}">Cancelar</a>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+</div>    
+
+{% endblock %}

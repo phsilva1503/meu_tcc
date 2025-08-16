@@ -1,0 +1,65 @@
+
+
+.task-status-done{
+
+    padding: .375rem ;
+    background-color: rgb(3, 105, 25);
+    position: inherit;
+    margin-top: 0px;
+    border-radius: 5px;
+    color: white;
+    
+}
+
+.task-status-notdone{
+
+    padding: .375rem ;
+    background-color: rgb(255, 102, 0);
+    position: inherit;
+    margin-top: 0px;
+    border-radius: 5px;
+    color: white;
+}
+
+
+.task{
+
+    font-family:Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 22px;
+    padding-right:10%;
+    color: rgb(23, 23, 23);
+
+ 
+}
+
+.container{
+
+    background-color: rgb(233, 236, 241);
+    padding: 2%;
+    border-radius: 10px;
+    font-weight:bold;
+   
+    
+
+}
+
+.tela{
+    height: 90vh;
+    width: 100vw;
+    padding-top: 10vh;
+    background: rgb(237, 226, 226);
+    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgb(40, 28, 60) 100%); 
+}
+
+.flash-messages {
+    list-style: none;
+    color: red;
+    padding: 10px;
+    margin: 0;
+}
+/* Adicione mais estilos conforme necessário para outras categorias */
+
+
+
+
