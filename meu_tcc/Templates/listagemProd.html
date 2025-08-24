@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Produção</title>
+</head>
+<body>
+    <h1>Controle de Produção</h1>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Bloco ID</th>
+                <th>Data de Produção</th>
+                <th>Tipo de Espuma</th>
+                <th>Densidade Real</th>
+                <th>Conformidade</th>
+                <th>Observações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bloco in blocos %}
+            <tr>
+                <td>{{ bloco.id }}</td>
+                <td>{{ bloco.bloco_id }}</td>
+                <td>{{ bloco.data_producao.strftime('%d/%m/%Y') }}</td>
+                <td>{{ bloco.tipo_espuma }}</td>
+                <td>{{ bloco.densidade_real }}</td>
+                <td>{{ bloco.conformidade }}</td>
+                <td>{{ bloco.observacoes }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="/">Voltar ao Cadastro</a>
+</body>
+</html>

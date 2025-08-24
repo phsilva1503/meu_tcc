@@ -1,2 +1,0 @@
-pull request teste
-teste 2 gitgnore
