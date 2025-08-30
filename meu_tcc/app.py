@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from datetime import datetime
 
 app = Flask(__name__)
@@ -9,7 +8,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '123'
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 # -----------------------
 # MODELO
@@ -17,7 +15,7 @@ migrate = Migrate(app, db)
 class Bloco(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     bloco_id = db.Column(db.String(50), unique=True, nullable=False)
-    data_producao = db.Column(db.Date, nullable=False, default=datetime.utcnow)
+    data_producao = db.Column(db.Date, default=datetime.utcnow)
     tipo_espuma = db.Column(db.String(50), nullable=False)
     densidade_real = db.Column(db.Float, nullable=False)
     conformidade = db.Column(db.String(20), nullable=False)
@@ -25,18 +23,15 @@ class Bloco(db.Model):
     observacao2 = db.Column(db.Text)
 
 # -----------------------
-# ROTA PRINCIPAL (index)
+# ROTAS
 # -----------------------
 @app.route('/')
 def index():
-    blocos = Bloco.query.all()  # agora a página inicial também recebe blocos
+    blocos = Bloco.query.all()
     return render_template('index.html', blocos=blocos)
 
-# -----------------------
-# ROTA CADASTRO DE BLOCO
-# -----------------------
 @app.route('/cadastro', methods=['GET', 'POST'])
-def cadastro_prod():   # nome da função em minúsculo (boa prática)
+def cadastro_prod():
     if request.method == 'POST':
         bloco_id = request.form['bloco_id']
         existente = Bloco.query.filter_by(bloco_id=bloco_id).first()
@@ -50,7 +45,7 @@ def cadastro_prod():   # nome da função em minúsculo (boa prática)
             tipo_espuma=request.form['tipo_espuma'],
             densidade_real=float(request.form['densidade_real']),
             conformidade=request.form['conformidade'],
-            observacoes=request.form['observacoes'],
+            observacoes=request.form.get('observacoes'),
             observacao2=request.form.get('observacao2')
         )
         db.session.add(bloco)
@@ -65,4 +60,5 @@ def cadastro_prod():   # nome da função em minúsculo (boa prática)
 # EXECUÇÃO
 # -----------------------
 if __name__ == "__main__":
+    db.create_all()  # cria o banco e tabelas se não existirem
     app.run(debug=True)
