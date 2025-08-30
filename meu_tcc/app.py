@@ -10,7 +10,7 @@ app.config['SECRET_KEY'] = '123'
 db = SQLAlchemy(app)
 
 # -----------------------
-# MODELO
+# MODELO feito via --force
 # -----------------------
 class Bloco(db.Model):
     id = db.Column(db.Integer, primary_key=True)
