@@ -1,5 +1,16 @@
+/* Reset básico para remover margens/paddings padrão do body */
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 .navbar {
     background-color: #003580;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    border-bottom: none;
+    box-shadow: none;
 }
 
         .navbar-brand img {
@@ -114,6 +125,8 @@
         .hero-section {
             background: linear-gradient(135deg, #003580 0%, #002a66 100%);
             color: white;
+            margin-top: 0 !important;
+            padding-top: 0;
             padding: 120px 0; /* Aumento do padding vertical */
             text-align: center;
         }
@@ -122,6 +135,7 @@
             font-weight: 800; /* Negrito mais forte */
             margin-bottom: 25px;
             font-size: 3.5rem; /* Ajuste de tamanho */
+            margin-top: 0 !important; /* 🔴 CORREÇÃO: Remove a barra branca entre navbar e hero */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Sombra de texto para destaque */
         }
 

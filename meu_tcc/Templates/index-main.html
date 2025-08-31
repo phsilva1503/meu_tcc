@@ -28,25 +28,38 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#laudo-tecnico">Laudo Técnico</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#controle-producao">Controle de Produção</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#lean-six-sigma">Lean Six Sigma</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#analise-preditiva">Análise Preditiva</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('index') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('cadastro_prod') }}">Laudo Técnico</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('controle_producao') }}">Controle de Produção</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('lean_six_sigma') }}">Lean Six Sigma</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('analise_preditiva') }}">Análise Preditiva</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
                 </ul>
             </div>
         </div>
     </nav>
+    <!-- Flash Messages -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+               {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'danger' else 'success' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
 
-    <!-- Hero Section -->
-    <section class="hero-section py-5">
-        <div class="container text-center">
-            <h1 class="display-4 fw-bold">Plataforma de Gestão da Qualidade</h1>
-            <p class="lead">Solução integrada para qualidade, produção e melhoria contínua usando Lean Six Sigma e análise de dados</p>
-            <a href="#modulos" class="btn btn-primary btn-lg mt-3">Explorar Módulos</a>
-        </div>
-    </section>
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container text-center">  <!-- container aqui também -->
+        <h1 class="display-4 fw-bold">Plataforma de Gestão da Qualidade</h1>
+        <p class="lead">Solução integrada para qualidade, produção e melhoria contínua usando Lean Six Sigma e análise de dados</p>
+        <a href="#modulos" class="btn btn-primary btn-lg mt-3">Explorar Módulos</a>
+    </div>
+</section>
 
     <!-- Módulos da Plataforma -->
     <section id="modulos" class="py-5">
@@ -121,6 +134,7 @@
 
     <!-- Outras seções (Dashboard e Análise Preditiva) permanecem iguais -->
 
+
     <!-- Footer -->
     <footer class="bg-dark text-light py-5">
         <div class="container">
@@ -132,11 +146,11 @@
                 <div class="col-md-4 mb-4 mb-md-0">
                     <h5>Links Rápidos</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#laudo-tecnico" class="text-light text-decoration-none">Laudo Técnico</a></li>
-                        <li><a href="#controle-producao" class="text-light text-decoration-none">Controle de Produção</a></li>
-                        <li><a href="#lean-six-sigma" class="text-light text-decoration-none">Lean Six Sigma</a></li>
-                        <li><a href="#analise-preditiva" class="text-light text-decoration-none">Análise Preditiva</a></li>
-                        <li><a href="#dashboard" class="text-light text-decoration-none">Dashboard</a></li>
+                        <li><a href="{{ url_for('cadastro_prod') }}" class="text-light text-decoration-none">Laudo Técnico</a></li>
+                        <li><a href="{{ url_for('controle_producao') }}" class="text-light text-decoration-none">Controle de Produção</a></li>
+                        <li><a href="{{ url_for('lean_six_sigma') }}" class="text-light text-decoration-none">Lean Six Sigma</a></li>
+                        <li><a href="{{ url_for('analise_preditiva') }}" class="text-light text-decoration-none">Análise Preditiva</a></li>
+                        <li><a href="{{ url_for('dashboard') }}" class="text-light text-decoration-none">Dashboard</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">

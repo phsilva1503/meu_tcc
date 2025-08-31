@@ -28,7 +28,7 @@ class Bloco(db.Model):
 @app.route('/')
 def index():
     blocos = Bloco.query.all()
-    return render_template('index.html', blocos=blocos)
+    return render_template('index-main.html', blocos=blocos)
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro_prod():
@@ -46,7 +46,7 @@ def cadastro_prod():
             densidade_real=float(request.form['densidade_real']),
             conformidade=request.form['conformidade'],
             observacoes=request.form.get('observacoes'),
-            observacao2=request.form.get('observacao2')
+            observacao2=request.form.get('observacao2'),
         )
         db.session.add(bloco)
         db.session.commit()
@@ -56,9 +56,36 @@ def cadastro_prod():
     blocos = Bloco.query.all()
     return render_template('cadastro_prod.html', blocos=blocos)
 
+# criei essas rotas novas
+@app.route('/controle-producao')
+def controle_producao():
+    blocos = Bloco.query.all()
+    return render_template('controle_producao.html', blocos=blocos)
+
+@app.route('/laudo-tecnico')
+def laudo_tecnico():
+    return render_template('laudo-tecnico.html')
+
+@app.route('/lean_six_sigma')
+def lean_six_sigma():
+    return render_template('lean.html')
+
+@app.route('/analise_preditiva')
+def analise_preditiva():
+    return render_template('analise_preditiva.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/relatorios')
+def relatorios():
+    return render_template('relatorios.html')
+
 # -----------------------
 # EXECUÇÃO
 # -----------------------
 if __name__ == "__main__":
-    db.create_all()  # cria o banco e tabelas se não existirem
+    with app.app_context(): # tem que estar dentro do app context para criar o banco
+        db.create_all()  # cria o banco e tabelas se não existirem
     app.run(debug=True)
