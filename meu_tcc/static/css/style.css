@@ -11,6 +11,7 @@ body {
     padding-bottom: 0 !important;
     border-bottom: none;
     box-shadow: none;
+    z-index: 1030; /* Garante que fique acima de outros elementos */
 }
 
         .navbar-brand img {

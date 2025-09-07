@@ -1,195 +1,300 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Laudo Técnico - Plataforma de Gestão da Qualidade</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Laudo Técnico - Plataforma de Gestão da Qualidade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Ícones do Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- CSS Personalizado -->
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+  <style>
+    :root { --ink:#222; --line:#cfcfcf; --brand:#0d6efd; }
+    body { background:#f6f7fb; }
+    /* Folha do laudo (A4) */
+    .sheet {
+      background:#fff; color:var(--ink);
+      width:210mm; min-height:297mm; margin:2rem auto; padding:16mm 14mm;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+    .laudo-head {
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:10mm;
+      border-bottom:2px solid var(--line); padding-bottom:8px;
+    }
+    .laudo-head h2 { font-size:18px; font-weight:700; margin:0; letter-spacing:.3px; }
+    .logo { height:34px; object-fit:contain; }
+    .section-title {
+      font-weight:700; font-size:14px; margin:.6rem 0 .4rem; letter-spacing:.2px;
+    }
+    /* Tabelas do formulário */
+    .grid {
+      width:100%; border:1px solid var(--line); border-radius:6px; overflow:hidden; margin-bottom:10px;
+    }
+    .grid .rowline { display:grid; grid-template-columns: 1fr 1fr; border-top:1px solid var(--line); }
+    .grid .rowline:first-child { border-top:none; }
+    .grid .cell { padding:8px 10px; display:flex; gap:8px; align-items:center; }
+    .grid .label { font-size:12px; color:#444; min-width:160px; }
+    .grid .wide { grid-column: 1 / -1; }
+    .grid input, .grid select, .grid textarea {
+      border:1px solid var(--line); border-radius:6px; padding:6px 8px; width:100%; font-size:14px;
+    }
+    .xgroup { display:flex; align-items:center; gap:6px; }
+    .xgroup input { max-width:110px; text-align:center; }
+    textarea { min-height:70px; }
+    .footline {
+      display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;
+    }
+    /* Campos calculados */
+    .readonly { background:#f7f7f7; }
+    /* Botões */
+    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin:16px auto 0; width:210mm; }
+    @media print {
+      body { background:#fff; }
+      .navbar, .toolbar { display:none !important; }
+      .sheet { margin:0; box-shadow:none; }
+      @page { size: A4; margin: 12mm; }
+    }
+  </style>
 </head>
-<body class="bg-light">
+<body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('main.index') }}">
-                <img src="{{ url_for('static', filename='imagens/logo-bonsono.png') }}" alt="Logo BonSono" width="40" height="40" class="me-2">
-                Plataforma de Gestão da Qualidade
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.index') }}#laudo-tecnico">Laudo Técnico</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Controle de Produção</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.index') }}#lean-six-sigma">Lean Six Sigma</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.index') }}#analise-preditiva">Análise Preditiva</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.index') }}#dashboard">Dashboard</a>
-                    </li>
-                </ul>
-                <div class="d-flex ms-3">
-                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light me-2">Login</a>
-                    <a href="{{ url_for('auth.registrar') }}" class="btn btn-light">Registrar</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #003580;">
+  <div class="container-fluid">
+    <!-- Logo + Título -->
+    <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+      <img src="{{ url_for('static', filename='imagens/logo-bonsono.png') }}" alt="Logo BonSono" style="height: 50px; width: auto; margin-right: 10px;">
+      Plataforma de Gestão da Qualidade
+    </a>
 
-    <!-- Conteúdo Principal -->
-    <div class="container my-5">
-        <h1 class="text-center mb-4">Laudo Técnico</h1>
-        <p class="text-center text-muted mb-5">Preencha os dados para gerar o laudo automaticamente.</p>
+    <!-- Botão colapsável para mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body p-4">
-                <h5 class="card-title mb-4"><i class="bi bi-clipboard-check me-2"></i>Preenchimento Automático de Laudos</h5>
-                <form id="formulario-laudo">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="pedido-numero" class="form-label">Número do Pedido</label>
-                            <input type="text" class="form-control" id="pedido-numero" placeholder="Informe o número do pedido" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="cliente" class="form-label">Cliente</label>
-                            <input type="text" class="form-control" id="cliente" placeholder="Nome do cliente" required>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="bloco-altura" class="form-label">Altura do Bloco (cm)</label>
-                            <input type="number" class="form-control" id="bloco-altura" placeholder="Altura do bloco em cm" step="0.01" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="laminas-peso" class="form-label">Peso da Lâmina (kg)</label>
-                            <input type="number" class="form-control" id="laminas-peso" placeholder="Peso da lâmina em kg" step="0.01" required>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="observacoes" class="form-label">Observações</label>
-                        <textarea class="form-control" id="observacoes" rows="3" placeholder="Adicione observações técnicas"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="responsavel" class="form-label">Responsável</label>
-                        <input type="text" class="form-control" id="responsavel" placeholder="Nome do responsável" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="data" class="form-label">Data</label>
-                        <input type="date" class="form-control" id="data" required>
-                    </div>
+    <!-- Links do menu -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('laudo_tecnico') }}">Laudo Técnico</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('controle_producao') }}#controle-producao">Controle de Produção</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('lean_six_sigma') }}#lean-six-sigma">Lean Six Sigma</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('analise_preditiva') }}#analise-preditiva">Análise Preditiva</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}#dashboard">Dashboard</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-                    <h5 class="mt-4 mb-3"><i class="bi bi-calculator me-2"></i>Dados Calculados Automaticamente</h5>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="densidade-obtida" class="form-label">Densidade Obtida (kg/m³)</label>
-                            <input type="text" class="form-control" id="densidade-obtida" readonly>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="volume-lamina" class="form-label">Volume da Lâmina (m³)</label>
-                            <input type="text" class="form-control" id="volume-lamina" readonly>
-                        </div>
-                    </div>
-
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                        <button type="submit" class="btn btn-primary px-4">
-                            <i class="bi bi-file-earmark-text me-2"></i>Gerar Laudo
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+  <!-- Folha do Laudo -->
+  <div class="sheet">
+    <div class="laudo-head">
+      <img src="{{ url_for('static', filename='imagens/logo-bonsono.png') }}" alt="BonSono" style="height: 60px; width: auto;">
+      <h2>LAUDO TÉCNICO – BLOCO LAMINADO</h2>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <h5>Plataforma de Gestão de Espumas Industriais</h5>
-                    <p>Soluções integradas para monitoramento, análise e melhoria contínua de processos de produção de espumas.</p>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-light"><i class="bi bi-facebook fs-4"></i></a>
-                        <a href="#" class="text-light"><i class="bi bi-twitter fs-4"></i></a>
-                        <a href="#" class="text-light"><i class="bi bi-instagram fs-4"></i></a>
-                        <a href="#" class="text-light"><i class="bi bi-linkedin fs-4"></i></a>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <h5>Links Rápidos</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#laudo-tecnico" class="text-light text-decoration-none">Laudo Técnico</a></li>
-                        <li><a href="#controle-producao" class="text-light text-decoration-none">Controle de Produção</a></li>
-                        <li><a href="#lean-six-sigma" class="text-light text-decoration-none">Lean Six Sigma</a></li>
-                        <li><a href="#analise-preditiva" class="text-light text-decoration-none">Análise Preditiva</a></li>
-                        <li><a href="#dashboard" class="text-light text-decoration-none">Dashboard</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h5>Contato</h5>
-                    <p><i class="bi bi-envelope me-2"></i> suporte@espumasindustriais.com</p>
-                    <p><i class="bi bi-geo-alt me-2"></i> Universidade Federal de Alagoas</p>
-                    <p><i class="bi bi-info-circle me-2"></i> Desenvolvido como parte do TCC</p>
-                </div>
-            </div>
-            <hr class="text-light my-4">
-            <p class="text-center mb-0">© 2025 Plataforma de Gestão de Espumas Industriais. Todos os direitos reservados.</p>
+    <!-- 1. Identificação do Pedido -->
+    <div class="section-title">1. Identificação do Pedido</div>
+    <div class="grid">
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Número do Pedido:</span>
+          <input id="pedido" type="text" placeholder="Ex.: 474747" />
         </div>
-    </footer>
+        <div class="cell">
+          <span class="label">Cliente:</span>
+          <input id="cliente" type="text" placeholder="Nome do cliente" />
+        </div>
+      </div>
+    </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 2. Identificação do Bloco -->
+    <div class="section-title">2. Identificação do Bloco</div>
+    <div class="grid">
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Densidade do Bloco (kg/m³):</span>
+          <input id="densidade-bloco" type="text" placeholder="Ex.: D33 selado" />
+        </div>
+        <div class="cell">
+          <span class="label">Número do Bloco:</span>
+          <input id="num-bloco" type="text" placeholder="Ex.: 62" />
+        </div>
+      </div>
+      <div class="rowline">
+        <div class="cell wide">
+          <span class="label">Medidas do Bloco (L × C × A) (cm):</span>
+          <div class="xgroup">
+            <input id="bloco-largura-cm" type="number" step="0.01" placeholder="Largura (cm)">
+            <span>×</span>
+            <input id="bloco-comprimento-cm" type="number" step="0.01" placeholder="Comprimento (cm)">
+            <span>×</span>
+            <input id="bloco-altura-cm" type="number" step="0.01" placeholder="Altura (cm)">
+          </div>
+        </div>
+      </div>
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Lote do Bloco:</span>
+          <input id="lote-bloco" type="text" placeholder="Ex.: 06" />
+        </div>
+        <div class="cell">
+          <!-- espaço livre para manter layout limpo -->
+          <span class="label"></span>
+          <div style="flex:1"></div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Script para calcular densidade dos blocos - ta errado, vou precisar alterar!!!!! -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Constantes predefinidas para largura e comprimento (em metros)
-            const LARGURA_LAMINA = 1.2;
-            const COMPRIMENTO_LAMINA = 2.4;
+    <!-- 3. Cálculo da Densidade da Lâmina -->
+    <div class="section-title">3. Cálculo da Densidade da Lâmina</div>
+    <div class="grid">
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Lâmina (Topo/Meio/Fundo):</span>
+          <input id="posicao-lamina" type="text" placeholder="Ex.: Topo" />
+        </div>
+        <div class="cell">
+          <span class="label">Peso da Lâmina (kg):</span>
+          <input id="peso-kg" type="number" step="0.0001" placeholder="Ex.: 13,800 kg" />
+        </div>
+      </div>
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Largura da Lâmina (m):</span>
+          <input id="largura-m" type="number" step="0.0001" />
+        </div>
+        <div class="cell">
+          <span class="label">Comprimento da Lâmina (m):</span>
+          <input id="comprimento-m" type="number" step="0.0001" />
+        </div>
+      </div>
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Altura da Lâmina (m):</span>
+          <input id="altura-m" type="number" step="0.0001" />
+        </div>
+        <div class="cell">
+          <span class="label">Volume da Lâmina (m³):</span>
+          <input id="volume-m3" class="readonly" type="text" readonly />
+        </div>
+      </div>
+      <div class="rowline">
+        <div class="cell wide">
+          <span class="label">Densidade Obtida (kg/m³) (Peso/Volume):</span>
+          <input id="densidade-obtida" class="readonly" type="text" readonly />
+        </div>
+      </div>
+    </div>
 
-            // Função para calcular volume e densidade
-            function calcularDados() {
-                const alturaBloco = parseFloat(document.getElementById('bloco-altura').value) || 0;
-                const pesoLamina = parseFloat(document.getElementById('laminas-peso').value) || 0;
+    <!-- 4. Observações -->
+    <div class="section-title">4. Observações</div>
+    <div class="grid">
+      <div class="rowline">
+        <div class="cell wide">
+          <textarea id="observacoes" placeholder="Anote observações técnicas relevantes"></textarea>
+        </div>
+      </div>
+    </div>
 
-                // Converter altura de cm para metros
-                const alturaEmMetros = alturaBloco / 100;
+    <!-- Rodapé: Data e Responsável -->
+    <div class="footline">
+      <div class="grid">
+        <div class="rowline">
+          <div class="cell">
+            <span class="label">Data:</span>
+            <input id="data" type="date" />
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="rowline">
+          <div class="cell">
+            <span class="label">Responsável:</span>
+            <input id="responsavel" type="text" placeholder="Assinatura/Responsável" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                // Calcular volume da lâmina
-                const volumeLamina = LARGURA_LAMINA * COMPRIMENTO_LAMINA * alturaEmMetros;
-                document.getElementById('volume-lamina').value = volumeLamina > 0 ? volumeLamina.toFixed(4) : '';
+  <!-- Ações -->
+  <div class="toolbar">
+    <button class="btn btn-outline-secondary" id="limpar"><i class="bi bi-eraser me-1"></i>Limpar</button>
+    <button class="btn btn-primary" id="imprimir"><i class="bi bi-printer me-1"></i>Imprimir / Salvar PDF</button>
+  </div>
 
-                // Calcular densidade obtida
-                const densidadeObtida = volumeLamina > 0 ? pesoLamina / volumeLamina : 0;
-                document.getElementById('densidade-obtida').value = densidadeObtida > 0 ? densidadeObtida.toFixed(2) : '';
-            }
+ <script>
+  const el = id => document.getElementById(id);
 
-            // Adicionar eventos de input
-            document.getElementById('bloco-altura').addEventListener('input', calcularDados);
-            document.getElementById('laminas-peso').addEventListener('input', calcularDados);
+  // Conversão robusta de string -> número (aceita "1.234,56", "1234.56", "1,234" etc.)
+  function toNum(v) {
+    if (v === null || v === undefined) return 0;
+    let s = String(v).trim();
+    if (s === '') return 0;
+    // remove espaços
+    s = s.replace(/\s+/g, '');
+    // se contém '.' e ',' -> assume '.' milhares e ',' decimal: remove '.' e troca ',' por '.'
+    if (s.indexOf('.') !== -1 && s.indexOf(',') !== -1) {
+      s = s.replace(/\./g, '').replace(',', '.');
+    } else if (s.indexOf(',') !== -1) {
+      // só ',' -> decimal
+      s = s.replace(',', '.');
+    } // se só '.', mantém (é decimal no padrão JS)
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
 
-            // Definir data atual no campo
-            const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('data').value = hoje;
+  // Formatação pt-BR para exibir (usar no campo readonly)
+  function fmtBR(n, dec = 3) {
+    if (!isFinite(n)) return '';
+    return n.toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  }
 
-            // Calcular ao carregar a página
-            calcularDados();
-        });
-    </script>
-</body>
-</html>
+  function autopreencherLamina() {
+    const Lcm = toNum(el('bloco-largura-cm').value);
+    const Ccm = toNum(el('bloco-comprimento-cm').value);
+    if (Lcm > 0) el('largura-m').value = (Lcm / 100).toFixed(2); // value em formato "1.87" (aceito por inputs number)
+    if (Ccm > 0) el('comprimento-m').value = (Ccm / 100).toFixed(2);
+    calcular();
+  }
+
+  function calcular() {
+    const largura = toNum(el('largura-m').value);
+    const comprimento = toNum(el('comprimento-m').value);
+    const altura = toNum(el('altura-m').value);
+    const peso = toNum(el('peso-kg').value);
+
+    // cálculo em metros e m³
+    const volume = largura * comprimento * altura; // m³
+    el('volume-m3').value = volume > 0 ? fmtBR(volume, 3) : '';
+
+    const dens = (volume > 0) ? (peso / volume) : 0; // kg/m³
+    el('densidade-obtida').value = dens > 0 ? fmtBR(dens, 2) : '';
+
+    // Ajuda de depuração: abra o console do navegador (F12) se quiser conferir valores
+    console.log('DEBUG: ', { largura, comprimento, altura, peso, volume, dens });
+  }
+
+  // Eventos
+  ['bloco-largura-cm', 'bloco-comprimento-cm'].forEach(id => el(id).addEventListener('input', autopreencherLamina));
+  ['largura-m', 'comprimento-m', 'altura-m', 'peso-kg'].forEach(id => el(id).addEventListener('input', calcular));
+
+  // Data
+  if (el('data')) el('data').value = new Date().toISOString().split('T')[0];
+
+  // Botões
+  if (el('imprimir')) el('imprimir').addEventListener('click', () => window.print());
+  if (el('limpar')) el('limpar').addEventListener('click', () => {
+    document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(i => i.value = '');
+    el('volume-m3').value = '';
+    el('densidade-obtida').value = '';
+    if (el('data')) el('data').value = new Date().toISOString().split('T')[0];
+  });
+
+  // cálculo inicial
+  calcular();
+</script>
+

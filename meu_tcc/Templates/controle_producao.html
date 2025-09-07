@@ -110,9 +110,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('registrar') }}">Registrar</a>
+                    </li>
                 </ul>
-                <!-- Removi login/registrar por enquanto -->
-                <!-- adiciona depois, quando criar as rotas -->
             </div>
         </div>
     </nav>
@@ -152,7 +156,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="bloco-id" class="form-label">Número do Bloco:</label>
-                                    <input type="text" class="form-control" id="bloco-id" name="bloco_id" placeholder="Ex: BLOCO-001" required>
+                                    <input type="text" class="form-control" id="bloco-id" name="bloco_id" placeholder="Ex: 32" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="bloco-data" class="form-label">Data:</label>
@@ -204,7 +208,86 @@
 
                             <h6 class="mt-4 mb-3">🧪 Quantidade de Produtos Usados (em kg)</h6>
                             <div class="row g-3" id="produtos-usados-container">
-                                <!-- Produtos serão inseridos via JS ou manualmente -->
+                                <!-- Produtos principais -->
+                                <div class="col-md-4">
+                                     <label for="poliol" class="form-label">Poliol (kg):</label>
+                                     <input type="number" class="form-control" id="poliol" name="poliol" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="tdi" class="form-label">TDI (kg):</label>
+                                     <input type="number" class="form-control" id="tdi" name="tdi" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="copolímero" class="form-label">Copolímero (kg):</label>
+                                     <input type="number" class="form-control" id="copolímero" name="copolímero" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="carga" class="form-label">Carga (kg):</label>
+                                     <input type="number" class="form-control" id="carga" name="carga" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="silipor" class="form-label">Silicone (kg):</label>
+                                     <input type="number" class="form-control" id="silicone" name="silicone" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="ampur" class="form-label">Cloreto (kg):</label>
+                                     <input type="number" class="form-control" id="cloreto" name="cloreto" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="estandho" class="form-label">Estanho (kg):</label>
+                                     <input type="number" class="form-control" id="estanho" name="estanho" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="agua" class="form-label">Água (kg):</label>
+                                     <input type="number" class="form-control" id="agua" name="agua" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="amina" class="form-label">Amina (kg):</label>
+                                     <input type="number" class="form-control" id="amina" name="amina" step="0.01" min="0">
+                                </div>
+                                <!-- Pigmentos -->
+                                <div class="col-md-4">
+                                     <label for="pigmento-vermelho" class="form-label">Pigmento Vermelho (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-vermelho" name="pigmento_vermelho" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-azul" class="form-label">Pigmento Azul (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-azul" name="pigmento_azul" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-preto" class="form-label">Pigmento Preto (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-preto" name="pigmento_preto" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-amarelo" class="form-label">Pigmento Amarelo (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-amarelo" name="pigmento_amarelo" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-laranja" class="form-label">Pigmento Laranja (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-laranja" name="pigmento_laranja" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-violeta" class="form-label">Pigmento Violeta (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-violeta" name="pigmento_violeta" step="0.01" min="0">
+                                     </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-verde" class="form-label">Pigmento Verde (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-verde" name="pigmento_verde" step="0.01" min="0">
+                                </div>
+
+                                <!-- Produtos de viscosidade -->
+                                <div class="col-md-4">
+                                     <label for="pol-ta" class="form-label">Pol TA (kg):</label>
+                                     <input type="number" class="form-control" id="pol-ta" name="pol_ta" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pol-tb" class="form-label">Pol TB (kg):</label>
+                                     <input type="number" class="form-control" id="pol-tb" name="pol_tb" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="iso-t" class="form-label">Iso T (kg):</label>
+                                     <input type="number" class="form-control" id="iso-t" name="iso_t" step="0.01" min="0">
+                                </div>         
                             </div>
 
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">

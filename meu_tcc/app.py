@@ -25,6 +25,7 @@ class Bloco(db.Model):
 # -----------------------
 # ROTAS
 # -----------------------
+
 @app.route('/')
 def index():
     blocos = Bloco.query.all()
@@ -81,6 +82,14 @@ def dashboard():
 @app.route('/relatorios')
 def relatorios():
     return render_template('relatorios.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/registrar')
+def registrar():
+    return render_template('registrar.html')
 
 # -----------------------
 # EXECUÇÃO
