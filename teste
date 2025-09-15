@@ -1,0 +1,6 @@
+import os
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(basedir, 'bloco.db')
+print("Banco que será usado:", db_path)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
