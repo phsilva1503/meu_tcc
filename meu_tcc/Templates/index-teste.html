@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Bloco</title>
+</head>
+<body>
+    <h1>Cadastro de Bloco</h1>
+    <!-- Bloco de mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Formulário de cadastro -->
+    <form method="POST" action="/teste">
+        Bloco ID: <input type="text" name="bloco_id" required><br><br>
+        Tipo de Espuma: <input type="text" name="tipo_espuma" required><br><br>
+        Densidade Real: <input type="number" step="0.01" name="densidade_real" required><br><br>
+
+        Conformidade: 
+        <input type="radio" id="conforme_sim" name="conformidade" value="SIM" required>
+        <label for="conforme_sim">SIM</label>
+        <input type="radio" id="conforme_nao" name="conformidade" value="NÃO" required>
+        <label for="conforme_nao">NÃO</label><br><br>
+
+        Observações: <textarea name="observacoes"></textarea><br><br>
+        Observações 2: <textarea name="observacao2"></textarea><br><br>
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <h2>Lista de Blocos Cadastrados</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Bloco ID</th>
+                <th>Data de Produção</th>
+                <th>Tipo de Espuma</th>
+                <th>Densidade Real</th>
+                <th>Conformidade</th>
+                <th>Observações</th>
+                <th>Observações 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bloco in blocos %}
+            <tr>
+                <td>{{ bloco.id }}</td>
+                <td>{{ bloco.bloco_id }}</td>
+                <td>{{ bloco.data_producao.strftime('%d/%m/%Y') }}</td>
+                <td>{{ bloco.tipo_espuma }}</td>
+                <td>{{ bloco.densidade_real }}</td>
+                <td>{{ bloco.conformidade }}</td>
+                <td>{{ bloco.observacoes }}</td>
+                <td>{{ bloco.observacao2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

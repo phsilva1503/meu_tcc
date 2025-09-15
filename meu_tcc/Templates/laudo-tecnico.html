@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Laudo Técnico - Plataforma de Gestão da Qualidade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root { --ink:#222; --line:#cfcfcf; --brand:#0d6efd; }
+    body { background:#f6f7fb; }
+    /* Folha do laudo (A4) */
+    .sheet {
+      background:#fff; color:var(--ink);
+      width:210mm; min-height:297mm; margin:2rem auto; padding:16mm 14mm;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+    .laudo-head {
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:10mm;
+      border-bottom:2px solid var(--line); padding-bottom:8px;
+    }
+    .laudo-head h2 { font-size:18px; font-weight:700; margin:0; letter-spacing:.3px; }
+    .logo { height:34px; object-fit:contain; }
+    .section-title {
+      font-weight:700; font-size:14px; margin:.6rem 0 .4rem; letter-spacing:.2px;
+    }
+    /* Tabelas do formulário */
+    .grid {
+      width:100%; border:1px solid var(--line); border-radius:6px; overflow:hidden; margin-bottom:10px;
+    }
+    .grid .rowline { display:grid; grid-template-columns: 1fr 1fr; border-top:1px solid var(--line); }
+    .grid .rowline:first-child { border-top:none; }
+    .grid .cell { padding:8px 10px; display:flex; gap:8px; align-items:center; }
+    .grid .label { font-size:12px; color:#444; min-width:160px; }
+    .grid .wide { grid-column: 1 / -1; }
+    .grid input, .grid select, .grid textarea {
+      border:1px solid var(--line); border-radius:6px; padding:6px 8px; width:100%; font-size:14px;
+    }
+    .xgroup { display:flex; align-items:center; gap:6px; }
+    .xgroup input { max-width:110px; text-align:center; }
+    textarea { min-height:70px; }
+    .footline {
+      display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;
+    }
+    /* Campos calculados */
+    .readonly { background:#f7f7f7; }
+    /* Botões */
+    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin:16px auto 0; width:210mm; }
+    @media print {
+      body { background:#fff; }
+      .navbar, .toolbar { display:none !important; }
+      .sheet { margin:0; box-shadow:none; }
+      @page { size: A4; margin: 12mm; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #003580;">
+  <div class="container-fluid">
+    <!-- Logo + Título -->
+    <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+      <img src="{{ url_for('static', filename='imagens/logo-bonsono.png') }}" alt="Logo BonSono" style="height: 50px; width: auto; margin-right: 10px;">
+      Plataforma de Gestão da Qualidade
+    </a>
+
+    <!-- Botão colapsável para mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Links do menu -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('laudo_tecnico') }}">Laudo Técnico</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('controle_producao') }}#controle-producao">Controle de Produção</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('lean_six_sigma') }}#lean-six-sigma">Lean Six Sigma</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('analise_preditiva') }}#analise-preditiva">Análise Preditiva</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}#dashboard">Dashboard</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Folha do Laudo -->
+  <div class="sheet">
+    <div class="laudo-head">
+      <img src="{{ url_for('static', filename='imagens/logo-bonsono.png') }}" alt="BonSono" style="height: 60px; width: auto;">
+      <h2>LAUDO TÉCNICO – BLOCO LAMINADO</h2>
+    </div>
+
+    <!-- 1. Identificação do Pedido -->
+    <div class="section-title">1. Identificação do Pedido</div>
+    <div class="grid">
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Número do Pedido:</span>
+          <input id="pedido" type="text" placeholder="Ex.: 474747" />
+        </div>
+        <div class="cell">
+          <span class="label">Cliente:</span>
+          <input id="cliente" type="text" placeholder="Nome do cliente" />
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Identificação do Bloco -->
+    <div class="section-title">2. Identificação do Bloco</div>
+    <div class="grid">
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Densidade do Bloco (kg/m³):</span>
+          <input id="densidade-bloco" type="text" placeholder="Ex.: D33 selado" />
+        </div>
+        <div class="cell">
+          <span class="label">Número do Bloco:</span>
+          <input id="num-bloco" type="text" placeholder="Ex.: 62" />
+        </div>
+      </div>
+      <div class="rowline">
+        <div class="cell wide">
+          <span class="label">Medidas do Bloco (L × C × A) (cm):</span>
+          <div class="xgroup">
+            <input id="bloco-largura-cm" type="number" step="0.01" placeholder="Largura (cm)">
+            <span>×</span>
+            <input id="bloco-comprimento-cm" type="number" step="0.01" placeholder="Comprimento (cm)">
+            <span>×</span>
+            <input id="bloco-altura-cm" type="number" step="0.01" placeholder="Altura (cm)">
+          </div>
+        </div>
+      </div>
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Lote do Bloco:</span>
+          <input id="lote-bloco" type="text" placeholder="Ex.: 06" />
+        </div>
+        <div class="cell">
+          <!-- espaço livre para manter layout limpo -->
+          <span class="label"></span>
+          <div style="flex:1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Cálculo da Densidade da Lâmina -->
+    <div class="section-title">3. Cálculo da Densidade da Lâmina</div>
+    <div class="grid">
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Lâmina (Topo/Meio/Fundo):</span>
+          <input id="posicao-lamina" type="text" placeholder="Ex.: Topo" />
+        </div>
+        <div class="cell">
+          <span class="label">Peso da Lâmina (kg):</span>
+          <input id="peso-kg" type="number" step="0.0001" placeholder="Ex.: 13,800 kg" />
+        </div>
+      </div>
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Largura da Lâmina (m):</span>
+          <input id="largura-m" type="number" step="0.0001" />
+        </div>
+        <div class="cell">
+          <span class="label">Comprimento da Lâmina (m):</span>
+          <input id="comprimento-m" type="number" step="0.0001" />
+        </div>
+      </div>
+      <div class="rowline">
+        <div class="cell">
+          <span class="label">Altura da Lâmina (m):</span>
+          <input id="altura-m" type="number" step="0.0001" />
+        </div>
+        <div class="cell">
+          <span class="label">Volume da Lâmina (m³):</span>
+          <input id="volume-m3" class="readonly" type="text" readonly />
+        </div>
+      </div>
+      <div class="rowline">
+        <div class="cell wide">
+          <span class="label">Densidade Obtida (kg/m³) (Peso/Volume):</span>
+          <input id="densidade-obtida" class="readonly" type="text" readonly />
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Observações -->
+    <div class="section-title">4. Observações</div>
+    <div class="grid">
+      <div class="rowline">
+        <div class="cell wide">
+          <textarea id="observacoes" placeholder="Anote observações técnicas relevantes"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rodapé: Data e Responsável -->
+    <div class="footline">
+      <div class="grid">
+        <div class="rowline">
+          <div class="cell">
+            <span class="label">Data:</span>
+            <input id="data" type="date" />
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="rowline">
+          <div class="cell">
+            <span class="label">Responsável:</span>
+            <input id="responsavel" type="text" placeholder="Assinatura/Responsável" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ações -->
+  <div class="toolbar">
+    <button class="btn btn-outline-secondary" id="limpar"><i class="bi bi-eraser me-1"></i>Limpar</button>
+    <button class="btn btn-primary" id="imprimir"><i class="bi bi-printer me-1"></i>Imprimir / Salvar PDF</button>
+  </div>
+
+ <script>
+  const el = id => document.getElementById(id);
+
+  // Conversão robusta de string -> número (aceita "1.234,56", "1234.56", "1,234" etc.)
+  function toNum(v) {
+    if (v === null || v === undefined) return 0;
+    let s = String(v).trim();
+    if (s === '') return 0;
+    // remove espaços
+    s = s.replace(/\s+/g, '');
+    // se contém '.' e ',' -> assume '.' milhares e ',' decimal: remove '.' e troca ',' por '.'
+    if (s.indexOf('.') !== -1 && s.indexOf(',') !== -1) {
+      s = s.replace(/\./g, '').replace(',', '.');
+    } else if (s.indexOf(',') !== -1) {
+      // só ',' -> decimal
+      s = s.replace(',', '.');
+    } // se só '.', mantém (é decimal no padrão JS)
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+
+  // Formatação pt-BR para exibir (usar no campo readonly)
+  function fmtBR(n, dec = 3) {
+    if (!isFinite(n)) return '';
+    return n.toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  }
+
+  function autopreencherLamina() {
+    const Lcm = toNum(el('bloco-largura-cm').value);
+    const Ccm = toNum(el('bloco-comprimento-cm').value);
+    if (Lcm > 0) el('largura-m').value = (Lcm / 100).toFixed(2); // value em formato "1.87" (aceito por inputs number)
+    if (Ccm > 0) el('comprimento-m').value = (Ccm / 100).toFixed(2);
+    calcular();
+  }
+
+  function calcular() {
+    const largura = toNum(el('largura-m').value);
+    const comprimento = toNum(el('comprimento-m').value);
+    const altura = toNum(el('altura-m').value);
+    const peso = toNum(el('peso-kg').value);
+
+    // cálculo em metros e m³
+    const volume = largura * comprimento * altura; // m³
+    el('volume-m3').value = volume > 0 ? fmtBR(volume, 3) : '';
+
+    const dens = (volume > 0) ? (peso / volume) : 0; // kg/m³
+    el('densidade-obtida').value = dens > 0 ? fmtBR(dens, 2) : '';
+
+    // Ajuda de depuração: abra o console do navegador (F12) se quiser conferir valores
+    console.log('DEBUG: ', { largura, comprimento, altura, peso, volume, dens });
+  }
+
+  // Eventos
+  ['bloco-largura-cm', 'bloco-comprimento-cm'].forEach(id => el(id).addEventListener('input', autopreencherLamina));
+  ['largura-m', 'comprimento-m', 'altura-m', 'peso-kg'].forEach(id => el(id).addEventListener('input', calcular));
+
+  // Data
+  if (el('data')) el('data').value = new Date().toISOString().split('T')[0];
+
+  // Botões
+  if (el('imprimir')) el('imprimir').addEventListener('click', () => window.print());
+  if (el('limpar')) el('limpar').addEventListener('click', () => {
+    document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(i => i.value = '');
+    el('volume-m3').value = '';
+    el('densidade-obtida').value = '';
+    if (el('data')) el('data').value = new Date().toISOString().split('T')[0];
+  });
+
+  // cálculo inicial
+  calcular();
+</script>
+
