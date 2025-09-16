@@ -26,6 +26,8 @@ class Bloco(db.Model):
 # ROTAS
 # -----------------------
 
+
+
 @app.route('/')
 def index():
     blocos = Bloco.query.all()
