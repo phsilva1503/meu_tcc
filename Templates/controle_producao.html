@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Produção - Plataforma de Gestão da Qualidade</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Ícones do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- CSS Personalizado -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+
+    <!-- Estilos específicos para esta página -->
+    <style>
+        .navbar {
+            background-color: #003580;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-primary {
+            background-color: #003580;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #002a66;
+        }
+
+        .bi {
+            font-size: 2rem;
+            color: #003580;
+        }
+
+        .metric-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .bg-primary-light { background-color: #e3f2fd; }
+        .bg-success-light { background-color: #e8f5e9; }
+        .bg-warning-light { background-color: #fff3e0; }
+        .bg-danger-light { background-color: #ffebee; }
+
+        section { padding: 60px 0; }
+
+        .main-content {
+            background-color: #f8f9fa;
+            padding: 50px 0;
+        }
+
+        .formula-table-title {
+            border-bottom: 2px solid #003580;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            color: #003580;
+            font-weight: bold;
+        }
+
+        .formula-table thead th {
+            background-color: #003580;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='imagens/logo-bonsono.png') }}" alt="Logo BonSono" width="40" height="40">
+                Plataforma de Gestão da Qualidade
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('laudo_tecnico') }}">Laudo Técnico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('controle_producao') }}">Controle de Produção</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('lean_six_sigma') }}">Lean Six Sigma</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('analise_preditiva') }}">Análise Preditiva</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                
+                    </li>
+                    <li class="nav-item">
+            
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="container my-5 main-content">
+        <h1 class="text-center mb-5">Controle de Produção</h1>
+
+        <!-- Abas de Navegação -->
+        <ul class="nav nav-tabs mb-4" id="controleProducaoTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="cadastrar-bloco-tab" data-bs-toggle="tab" data-bs-target="#cadastrar-bloco" type="button" role="tab" aria-controls="cadastrar-bloco" aria-selected="true">Cadastrar Bloco</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="editar-estoque-tab" data-bs-toggle="tab" data-bs-target="#editar-estoque" type="button" role="tab" aria-controls="editar-estoque" aria-selected="false">Editar Estoque</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="estoque-atual-tab" data-bs-toggle="tab" data-bs-target="#estoque-atual" type="button" role="tab" aria-controls="estoque-atual" aria-selected="false">Estoque Atual</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="historico-tab" data-bs-toggle="tab" data-bs-target="#historico" type="button" role="tab" aria-controls="historico" aria-selected="false">Histórico e Gráficos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="formulas-tab" data-bs-toggle="tab" data-bs-target="#formulas" type="button" role="tab" aria-controls="formulas" aria-selected="false">Fórmulas Químicas</button>
+            </li>
+        </ul>
+
+        <!-- Conteúdo das Abas -->
+        <div class="tab-content" id="controleProducaoTabsContent">
+
+            <!-- Aba: Cadastrar Bloco -->
+            <div class="tab-pane fade show active" id="cadastrar-bloco" role="tabpanel" aria-labelledby="cadastrar-bloco-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">📋 Cadastro de Bloco de Espuma</h5>
+                        <form id="formulario-bloco" method="POST" action="{{ url_for('cadastro_prod') }}">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="bloco-id" class="form-label">Número do Bloco:</label>
+                                    <input type="text" class="form-control" id="bloco-id" name="bloco_id" placeholder="Ex: 32" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="bloco-data" class="form-label">Data:</label>
+                                    <input type="date" class="form-control" id="bloco-data" name="data_producao" value="{{- '' }}">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="bloco-tipo" class="form-label">Selecione o tipo de Espuma:</label>
+                                    <select class="form-select" id="bloco-tipo" name="tipo_espuma">
+                                        <option value="Comum">Comum</option>
+                                        <option value="Selada">Selada</option>
+                                        <option value="Especial">Especial</option>
+                                        <option value="Cilíndrica">Cilíndrica</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="bloco-densidade" class="form-label">Densidade:</label>
+                                    <input type="number" class="form-control" id="bloco-densidade" name="densidade_real" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                               <div class="col-md-6 offset-md-3">
+                                    <label for="bloco-altura" class="form-label">Altura do Bloco Quente (cm):</label>
+                                    <input type="number" class="form-control" id="bloco-altura" name="altura_bloco_quente" step="0.1" min="0" placeholder="Ex: 120.5" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Conformidade:</label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="conformidade" id="conforme" value="Conforme" checked>
+                                            <label class="form-check-label" for="conforme">Conforme</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="conformidade" id="nao-conforme" value="Não Conforme">
+                                            <label class="form-check-label" for="nao-conforme">Não Conforme</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bloco-obs" class="form-label d-flex align-items-center">
+                                   <i class="bi bi-pencil"></i> Observações:
+                                </label>
+                                <textarea class="form-control w-100" id="bloco-obs" name="observacoes" rows="3"></textarea>
+                            </div>
+
+                            <h6 class="mt-4 mb-3">🧪 Quantidade de Produtos Usados (em kg)</h6>
+                            <div class="row g-3" id="produtos-usados-container">
+                                <!-- Produtos principais -->
+                                <div class="col-md-4">
+                                     <label for="poliol" class="form-label">Poliol (kg):</label>
+                                     <input type="number" class="form-control" id="poliol" name="poliol" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="tdi" class="form-label">TDI (kg):</label>
+                                     <input type="number" class="form-control" id="tdi" name="tdi" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="copolímero" class="form-label">Copolímero (kg):</label>
+                                     <input type="number" class="form-control" id="copolímero" name="copolímero" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="carga" class="form-label">Carga (kg):</label>
+                                     <input type="number" class="form-control" id="carga" name="carga" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="silipor" class="form-label">Silicone (kg):</label>
+                                     <input type="number" class="form-control" id="silicone" name="silicone" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="ampur" class="form-label">Cloreto (kg):</label>
+                                     <input type="number" class="form-control" id="cloreto" name="cloreto" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="estandho" class="form-label">Estanho (kg):</label>
+                                     <input type="number" class="form-control" id="estanho" name="estanho" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="agua" class="form-label">Água (kg):</label>
+                                     <input type="number" class="form-control" id="agua" name="agua" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="amina" class="form-label">Amina (kg):</label>
+                                     <input type="number" class="form-control" id="amina" name="amina" step="0.01" min="0">
+                                </div>
+                                <!-- Pigmentos -->
+                                <div class="col-md-4">
+                                     <label for="pigmento-vermelho" class="form-label">Pigmento Vermelho (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-vermelho" name="pigmento_vermelho" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-azul" class="form-label">Pigmento Azul (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-azul" name="pigmento_azul" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-preto" class="form-label">Pigmento Preto (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-preto" name="pigmento_preto" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-amarelo" class="form-label">Pigmento Amarelo (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-amarelo" name="pigmento_amarelo" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-laranja" class="form-label">Pigmento Laranja (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-laranja" name="pigmento_laranja" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-violeta" class="form-label">Pigmento Violeta (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-violeta" name="pigmento_violeta" step="0.01" min="0">
+                                     </div>
+                                <div class="col-md-4">
+                                     <label for="pigmento-verde" class="form-label">Pigmento Verde (kg):</label>
+                                     <input type="number" class="form-control" id="pigmento-verde" name="pigmento_verde" step="0.01" min="0">
+                                </div>
+
+                                <!-- Produtos de viscosidade -->
+                                <div class="col-md-4">
+                                     <label for="pol-ta" class="form-label">Pol TA (kg):</label>
+                                     <input type="number" class="form-control" id="pol-ta" name="pol_ta" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="pol-tb" class="form-label">Pol TB (kg):</label>
+                                     <input type="number" class="form-control" id="pol-tb" name="pol_tb" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                     <label for="iso-t" class="form-label">Iso T (kg):</label>
+                                     <input type="number" class="form-control" id="iso-t" name="iso_t" step="0.01" min="0">
+                                </div>         
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                <button type="submit" class="btn btn-primary">Salvar e Gerar Laudo</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba: Editar Estoque -->
+            <div class="tab-pane fade" id="editar-estoque" role="tabpanel" aria-labelledby="editar-estoque-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">✏️ Edição Manual de Estoque</h5>
+                        <form id="formulario-estoque">
+                            <div class="row g-3" id="estoque-edit-container">
+                                <!-- Campos de estoque inseridos via JS -->
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                <button type="submit" class="btn btn-success">Salvar Estoque</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba: Estoque Atual -->
+            <div class="tab-pane fade" id="estoque-atual" role="tabpanel" aria-labelledby="estoque-atual-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">📦 Estoque Atual</h5>
+                        <div id="lista-estoque">
+                            <p class="text-center text-muted">Carregando estoque...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba: Histórico e Gráficos -->
+            <div class="tab-pane fade" id="historico" role="tabpanel" aria-labelledby="historico-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">📊 Histórico de Produção e Consumo</h5>
+                        <div class="mb-3">
+                            <button id="exportar-excel-btn" class="btn btn-outline-secondary btn-sm" disabled>
+                                <i class="bi bi-download"></i> Baixar Excel
+                            </button>
+                        </div>
+                        <div class="table-responsive mb-4">
+                            <table class="table table-striped table-hover" id="tabela-historico">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Data</th>
+                                        <th>Tipo</th>
+                                        <th>Densidade</th>
+                                        <th>Conformidade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Carregando histórico...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mb-3">
+                            <label for="produto-grafico-select" class="form-label">Escolha um produto para o gráfico:</label>
+                            <select class="form-select" id="produto-grafico-select" disabled>
+                                <option value="">Selecione um produto</option>
+                            </select>
+                        </div>
+                        <div class="bg-light p-3 rounded">
+                            <canvas id="grafico-consumo" width="400" height="200"></canvas>
+                            <p id="grafico-placeholder" class="text-center text-muted my-5">Selecione um produto para visualizar o gráfico.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba: Fórmulas Químicas -->
+            <div class="tab-pane fade" id="formulas" role="tabpanel" aria-labelledby="formulas-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Fórmulas Químicas das Espumas</h5>
+                        <p class="card-text">Tabelas com as quantidades de produtos químicos utilizados em cada tipo de espuma.</p>
+
+                        <!-- DN33 COMUM -->
+                        <h6 class="formula-table-title">DN33 COMUM</h6>
+                        <div class="table-responsive formula-table">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Quantidade (kg)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Poliol</td><td>75,000</td></tr>
+                                    <tr><td>TDI</td><td>62,700</td></tr>
+                                    <tr><td>Copolímero</td><td>4,800</td></tr>
+                                    <tr><td>Silipor 3020</td><td>2,730</td></tr>
+                                    <tr><td>Ampur 20032</td><td>0,170</td></tr>
+                                    <tr><td>Estandho</td><td>0,290</td></tr>
+                                    <tr><td>Cloreto</td><td>14,400</td></tr>
+                                    <tr><td>Carga</td><td>7,300</td></tr>
+                                    <tr><td>Pigmento</td><td>0,400</td></tr>
+                                    <tr><td>Aqua</td><td>4,700</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- DN25 SELADA -->
+                        <h6 class="formula-table-title mt-4">DN25 SELADA</h6>
+                        <div class="table-responsive formula-table">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Quantidade (kg)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Poliol</td><td>111,000</td></tr>
+                                    <tr><td>TDI</td><td>77,000</td></tr>
+                                    <tr><td>Copolímero</td><td>15,000</td></tr>
+                                    <tr><td>Silipor 3020</td><td>1,800</td></tr>
+                                    <tr><td>Ampur 20032</td><td>0,170</td></tr>
+                                    <tr><td>Estandho</td><td>0,330</td></tr>
+                                    <tr><td>Cloreto</td><td>10,500</td></tr>
+                                    <tr><td>Carga</td><td>8,000</td></tr>
+                                    <tr><td>Pigmento</td><td>0,500</td></tr>
+                                    <tr><td>Aqua</td><td>3,500</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JS Personalizado (opcional) -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>
+   
