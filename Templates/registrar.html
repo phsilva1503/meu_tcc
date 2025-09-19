@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - Plataforma de Gestão da Qualidade</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Ícones do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        .login-container h2 {
+            font-weight: 600;
+        }
+
+        .form-group label {
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #003580;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #002a66;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        .forgot-password-link {
+            float: right;
+            text-decoration: none;
+            color: #003580;
+        }
+
+        .forgot-password-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer-section {
+            background-color: #003580;
+            color: white;
+            padding: 30px 0;
+        }
+
+        .footer-section a {
+            color: white;
+        }
+
+        .footer-section a:hover {
+            color: #e9ecef;
+        }
+
+        /* Estilo do Navbar */
+        .navbar {
+            background-color: #003580; /* Cor azul para o navbar */
+            color: white; /* Texto branco para melhor contraste */
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .navbar-nav .nav-link {
+            color: white; /* Links no navbar em branco */
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: #e9ecef; /* Mudança de cor ao passar o mouse ou quando ativo */
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); /* Ícone do botão de toggle em branco */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="{{ url_for('static', filename='imagens/logo-bonsono.png') }}" alt="Logo BonSono" width="40" height="40">
+                Plataforma de Gestão da Qualidade
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('index')}}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('laudo_tecnico')}}">Laudo Técnico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('controle_producao')}}">Controle de Produção</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('lean_six_sigma')}}">Lean Six Sigma</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('analise_preditiva')}}">Análise Preditiva</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard')}}">Dashboard</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="login.html" class="btn btn-outline-light me-2">Login</a>
+                    <a href="registrar.html" class="btn btn-primary">Registrar</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Formulário de Registro -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card register-container">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-person-circle fs-1 text-primary"></i>
+                            <h2 class="mt-3">Crie sua conta</h2>
+                            <p class="text-muted">Registre-se para acessar todas as funcionalidades da plataforma</p>
+                        </div>
+
+                        <form>
+                            <div class="mb-3">
+                                <label for="nome" class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" id="nome" placeholder="Seu Nome Completo" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" class="form-control" id="email" placeholder="seu@email.com" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="senha" class="form-label">Senha</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                    <input type="password" class="form-control" id="senha" placeholder="********" required>
+                                    <a href="#" class="forgot-password-link">Esqueceu a senha?</a>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="confirmar-senha" class="form-label">Confirmar Senha</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                    <input type="password" class="form-control" id="confirmar-senha" placeholder="********" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Criar Conta</button>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <p class="text-center">Já possui uma conta?</p>
+                        <a href="{{ url_for('login')}}" class="btn btn-link text-center">Entrar na conta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Plataforma de Gestão da Qualidade</h5>
+                    <p>Soluções integradas para monitoramento, análise e melhoria contínua utilizando Lean Six Sigma e análise de dados.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="bi bi-facebook fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-twitter fs-4"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram fs-4"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5>Links Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#laudo-tecnico" class="text-light">Laudo Técnico</a></li>
+                        <li><a href="#controle-producao" class="text-light">Controle de Produção</a></li>
+                        <li><a href="#lean-six-sigma" class="text-light">Lean Six Sigma</a></li>
+                        <li><a href="#analise-preditiva" class="text-light">Análise Preditiva</a></li>
+                        <li><a href="#dashboard" class="text-light">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contato</h5>
+                    <p><i class="bi bi-envelope me-2"></i> suporte@plataformagestaoqualidade.com</p>
+                    <p><i class="bi bi-geo-alt me-2"></i> Universidade Federal de Alagoas</p>
+                    <p><i class="bi bi-info-circle me-2"></i> Desenvolvido como parte do TCC</p>
+                </div>
+            </div>
+            <hr class="text-light my-4">
+            <p class="text-center">© 2025 Plataforma de Gestão da Qualidade. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
