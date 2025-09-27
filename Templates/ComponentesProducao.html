@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Componentes da Produção</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <div class="container mx-auto mt-8 p-4">
+    <a href="{{ url_for('index') }}" 
+       class="inline-block mb-4 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+       Voltar
+    </a>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4 text-blue-600">
+        Produção {{ producao.id_producao }} (ID: {{ producao.id }})
+      </h2>
+      <p class="mb-4">
+        Data: <strong>{{ producao.data }}</strong> | 
+        Densidade: <strong>{{ producao.densidade }}</strong>
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-200 rounded-lg">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-2 text-left">Produto</th>
+              <th class="px-4 py-2 text-left">Quantidade Usada</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for componente in componentes  if componente.quantidade_usada > 0 %}
+              <tr class="border-t">
+                <td class="px-4 py-2">{{ componente.produto.nome }}</td>
+                <td class="px-4 py-2">{{ componente.quantidade_usada }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
