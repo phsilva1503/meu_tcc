@@ -44,4 +44,4 @@ class ComponenteProducao(db.Model):
 
 
 
-__all__ = ["db", "Componente", "Producao", "ComponenteProducao"]
+__all__ = ["db", "Componente", "Producao", "ComponenteProducao"].
