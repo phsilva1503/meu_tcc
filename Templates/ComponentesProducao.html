@@ -33,7 +33,7 @@
           <tbody>
             {% for componente in componentes  if componente.quantidade_usada > 0 %}
               <tr class="border-t">
-                <td class="px-4 py-2">{{ componente.produto.nome }}</td>
+                <td class="px-4 py-2">{{ componente.componente.nome }}</td>
                 <td class="px-4 py-2">{{ componente.quantidade_usada }}</td>
               </tr>
             {% endfor %}

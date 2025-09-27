@@ -97,7 +97,42 @@ def routes(app):
             producoes=producoes,
             hoje=hoje
         )
-    
+    # -----------------------
+    # Cadastro de Componentes
+    # -----------------------
+    @app.route("/cadastro_componente", methods=["GET", "POST"])
+    def cadastro_componente():
+        if request.method == "POST":
+            nome = request.form.get("nome")
+            if nome and not Componente.query.filter_by(nome=nome).first():
+                db.session.add(Componente(nome=nome,ativo=True))
+                db.session.commit()
+                flash(f"Componente '{nome}' cadastrado com sucesso!", "success")
+            else:
+                flash("Componente já existe ou nome inválido!", "danger")
+            return redirect(url_for("cadastro_componente"))
+
+        componentes = Componente.query.all()
+        return render_template("CadastroComponente.html", componentes=componentes)
+
+    @app.route('/toggle_componente/<int:componente_id>')
+    def toggle_componente(componente_id):
+    # Buscar o componente pelo ID
+        componente = Componente.query.get_or_404(componente_id)
+
+    # Alternar o status
+        componente.ativo = not componente.ativo
+
+    # Salvar no banco
+        db.session.commit()
+
+    # Flash com o nome correto do item
+        flash(f"Componente '{componente.nome}' agora está {'ativo' if componente.ativo else 'inativo'}.", "info")
+
+    # Redirecionar para a página de cadastro
+        return redirect(url_for('cadastro_componente'))
+
+
     @app.route('/ComponentesProducao/<int:producao_id>')
     def ver_componentes_producao(producao_id):
         producao = Producao.query.get_or_404(producao_id)
