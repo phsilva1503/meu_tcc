@@ -29,7 +29,8 @@ def routes(app):
     # -----------------------
     @app.route('/cadastro', methods=['GET', 'POST'])
     def cadastro_producao():
-        componentes = Componente.query.all()
+        todos_componentes = Componente.query.all()          # todos os componentes para lista
+        componente_ativo = Componente.query.filter_by(ativo=True).all()  # apenas ativos para form
         producoes = Producao.query.all()
         hoje = date.today()
 
@@ -39,8 +40,10 @@ def routes(app):
             # Verifica se já existe a produção
             if Producao.query.filter_by(producao_id=producao_id).first():
                 flash(f"Erro: Produção ID '{producao_id}' já cadastrada!", "danger")
-                return render_template('controle_producao.html',
-                    componentes=componentes,
+                return render_template(
+                    'controle_producao.html',
+                    componentes=componente_ativo,
+                    todos_componentes=todos_componentes,
                     producoes=producoes,
                     hoje=hoje
                 )
@@ -62,25 +65,36 @@ def routes(app):
             db.session.add(producao)
             db.session.flush()  # garante que producao.id esteja disponível
 
-            # Cria registros de ComponenteProducao
-            for componente in componentes:
-                qtd = float(request.form.get(f"componente_{componente.id}", 0))
+            # Cria registros de ComponenteProducao apenas para ativos
+            for comp in componente_ativo:
+                qtd = float(request.form.get(f"componente_{comp.id}", 0))
                 if qtd > 0:
-                    componente = ComponenteProducao(producao_id=producao.id,componente_id=componente.id,quantidade_usada=qtd
+                    comp_producao = ComponenteProducao(
+                        producao_id=producao.id,
+                        componente_id=comp.id,
+                        quantidade_usada=qtd
                     )
-                    db.session.add(componente)
+                    db.session.add(comp_producao)
 
             db.session.commit()
             flash(f"Produção '{producao_id}' cadastrada com sucesso!", "success")
-            
-            # Atualiza a lista de produções para mostrar no template
+
             producoes = Producao.query.all()
             return render_template(
-                'controle_producao.html', componentes=componentes,producoes=producoes,hoje=hoje
+                'controle_producao.html',
+                componentes=componente_ativo,
+                todos_componentes=todos_componentes,
+                producoes=producoes,
+                hoje=hoje
             )
 
         # GET: apenas renderiza a página
-        return render_template('controle_producao.html', componentes=componentes,producoes=producoes,hoje=hoje
+        return render_template(
+            'controle_producao.html',
+            componentes=componente_ativo,
+            todos_componentes=todos_componentes,
+            producoes=producoes,
+            hoje=hoje
         )
 
     # -----------------------
@@ -97,6 +111,7 @@ def routes(app):
             producoes=producoes,
             hoje=hoje
         )
+
     # -----------------------
     # Cadastro de Componentes
     # -----------------------
@@ -105,39 +120,36 @@ def routes(app):
         if request.method == "POST":
             nome = request.form.get("nome")
             if nome and not Componente.query.filter_by(nome=nome).first():
-                db.session.add(Componente(nome=nome,ativo=True))
+                db.session.add(Componente(nome=nome, ativo=True))
                 db.session.commit()
                 flash(f"Componente '{nome}' cadastrado com sucesso!", "success")
             else:
                 flash("Componente já existe ou nome inválido!", "danger")
             return redirect(url_for("cadastro_componente"))
 
-        componentes = Componente.query.all()
-        return render_template("CadastroComponente.html", componentes=componentes)
+        todos_componentes = Componente.query.all()
+        return render_template("CadastroComponente.html", todos_componentes=todos_componentes)
+    
+
 
     @app.route('/toggle_componente/<int:componente_id>')
     def toggle_componente(componente_id):
-    # Buscar o componente pelo ID
         componente = Componente.query.get_or_404(componente_id)
-
-    # Alternar o status
         componente.ativo = not componente.ativo
-
-    # Salvar no banco
         db.session.commit()
-
-    # Flash com o nome correto do item
         flash(f"Componente '{componente.nome}' agora está {'ativo' if componente.ativo else 'inativo'}.", "info")
-
-    # Redirecionar para a página de cadastro
         return redirect(url_for('cadastro_componente'))
 
-
-    @app.route('/ComponentesProducao/<int:producao_id>')
+    # -----------------------
+    # Componentes de uma produção
+    # -----------------------
+    @app.route('/ComponentesProducao/<int:producao_id>', methods=['POST', 'GET'])
     def ver_componentes_producao(producao_id):
         producao = Producao.query.get_or_404(producao_id)
         componentes = ComponenteProducao.query.filter_by(producao_id=producao_id).all()
         return render_template('ComponentesProducao.html', producao=producao, componentes=componentes)
+
+    # -----------------------
     # Outras rotas existentes
     # -----------------------
     @app.route('/laudo-tecnico')

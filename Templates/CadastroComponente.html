@@ -46,25 +46,30 @@
       Componentes Cadastrados
     </div>
     <div class="card-body p-0">
-      <table class="table table-bordered table-striped mb-0">
-        <thead>
+      <table class="table table-bordered table-striped mb-0 align-middle text-center">
+        <thead class="table-light">
           <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Status</th>
+            <th style="width: 10%;">ID</th>
+            <th style="width: 60%;">Nome</th>
+            <th style="width: 30%;">Status</th>
           </tr>
         </thead>
         <tbody>
-          {% for componente in componentes %}
+          {% for componente in todos_componentes %}
           <tr>
             <td>{{ componente.id }}</td>
-            <td>{{ componente.nome }}</td>
+            <td class="text-start">{{ componente.nome }}</td>
             <td>
-              <!-- Badge funciona como toggle -->
               {% if componente.ativo %}
-                <a href="{{ url_for('toggle_componente', componente_id=componente.id) }}" class="badge bg-success text-decoration-none">Ativo</a>
+                <a href="{{ url_for('toggle_componente', componente_id=componente.id) }}" 
+                   class="badge rounded-pill bg-success text-decoration-none px-3 py-2">
+                  Ativo
+                </a>
               {% else %}
-                <a href="{{ url_for('toggle_componente', componente_id=componente.id) }}" class="badge bg-secondary text-decoration-none">Inativo</a>
+                <a href="{{ url_for('toggle_componente', componente_id=componente.id) }}" 
+                   class="badge rounded-pill bg-secondary text-decoration-none px-3 py-2">
+                  Inativo
+                </a>
               {% endif %}
             </td>
           </tr>
@@ -79,7 +84,9 @@
   </div>
 
   <!-- Botão Voltar -->
-  <button onclick="window.location.href='{{ url_for('index') }}'" class="btn btn-secondary mt-4">Voltar ao Menu Principal</button>
+  <div class="text-center">
+    <button onclick="window.location.href='{{ url_for('index') }}'" class="btn btn-secondary mt-4">Voltar ao Menu Principal</button>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
