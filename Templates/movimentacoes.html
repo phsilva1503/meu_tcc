@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Movimentações - {{ componente.nome }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Movimentações do Componente: <strong>{{ componente.nome }}</strong></h2>
+
+    <a href="{{ url_for('cadastro_componente', produto_id=componente.id) }}" class="btn btn-secondary mb-3">Voltar ao Estoque</a>
+
+    {% if movimentacoes %}
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tipo</th>
+                <th>Quantidade</th>
+                <th>Data</th>
+                <th>Produção</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mov in movimentacoes %}
+            <tr>
+                <td>{{ mov.id }}</td>
+                <td>{{ mov.tipo.capitalize() }}</td>
+                <td>{{ mov.quantidade }}</td>
+                <td>{{ mov.data.strftime('%d/%m/%Y') }}</td>
+                <td>{{ mov.producao.id if mov.producao else '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div class="alert alert-info">Não há movimentações registradas para este componente.</div>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

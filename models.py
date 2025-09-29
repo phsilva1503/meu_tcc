@@ -43,6 +43,32 @@ class ComponenteProducao(db.Model):
     def __repr__(self):
         return f"<ComponenteProducao Produção:{self.producao_id} Componente:{self.componente_id} Qtd:{self.quantidade_usada}>"
 
+class Movimentacao(db.Model):
+    __tablename__ = "movimentacao"
+    id = db.Column(db.Integer, primary_key=True)
+    componente_id = db.Column(db.Integer, db.ForeignKey("componente.id"), nullable=False)
+    tipo = db.Column(db.String(10), nullable=False)  # 'entrada' ou 'saida'
+    quantidade = db.Column(db.Float, nullable=False)
+    data = db.Column(db.Date, default=date.today, nullable=False)
+    producao_id = db.Column(db.Integer, db.ForeignKey("producao.id"), nullable=True)
+
+    componente = db.relationship("Componente", backref="movimentacoes")
+    producao = db.relationship("Producao", backref="movimentacoes")
+
+    def __repr__(self):
+        return f"<Movimentacao Componente={self.componente_id}, Tipo={self.tipo}, Qtd={self.quantidade}, Data={self.data}>"
+
+class Estoque(db.Model):
+    __tablename__ = "estoque"
+    id = db.Column(db.Integer, primary_key=True)
+    componente_id = db.Column(db.Integer, db.ForeignKey("componente.id"), nullable=False)
+    quantidade = db.Column(db.Float, default=0.0, nullable=False)
+
+    componente = db.relationship("Componente", backref="estoque")
+
+    def __repr__(self):
+        return f"<Estoque Componente={self.componente_id}, Qtd={self.quantidade}>"
+    
 
 
-__all__ = ["db", "Componente", "Producao", "ComponenteProducao"]
+__all__ = ["db", "Componente", "Producao", "ComponenteProducao", "Movimentacao", "Estoque"]

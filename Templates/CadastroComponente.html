@@ -19,7 +19,6 @@
             <label for="nome" class="form-label">Nome do Componente</label>
             <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite o nome do componente" required>
           </div>
-
           <div class="col-md-3 mb-3">
             <button type="submit" class="btn btn-success w-100">Salvar</button>
           </div>
@@ -28,7 +27,7 @@
     </div>
   </div>
 
-  <!-- Exibição de Mensagens -->
+  <!-- Mensagens Flash -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       {% for category, message in messages %}
@@ -50,8 +49,10 @@
         <thead class="table-light">
           <tr>
             <th style="width: 10%;">ID</th>
-            <th style="width: 60%;">Nome</th>
-            <th style="width: 30%;">Status</th>
+            <th style="width: 35%;">Nome</th>
+            <th style="width: 15%;">Saldo Atual</th>
+            <th style="width: 15%;">Status</th>
+            <th style="width: 25%;">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -59,6 +60,7 @@
           <tr>
             <td>{{ componente.id }}</td>
             <td class="text-start">{{ componente.nome }}</td>
+            <td>{{ saldos[componente.id] }}</td>
             <td>
               {% if componente.ativo %}
                 <a href="{{ url_for('toggle_componente', componente_id=componente.id) }}" 
@@ -72,10 +74,20 @@
                 </a>
               {% endif %}
             </td>
+            <td>
+              <a href="{{ url_for('movimentacoes', componente_id=componente.id) }}" 
+                 class="btn btn-sm btn-primary mb-1">
+                Ver Movimentações
+              </a>
+              <a href="{{ url_for('ajustar_estoque', componente_id=componente.id) }}" 
+                 class="btn btn-sm btn-warning mb-1">
+                Ajuste de Estoque
+              </a>
+            </td>
           </tr>
           {% else %}
           <tr>
-            <td colspan="3" class="text-center text-muted">Nenhum componente cadastrado.</td>
+            <td colspan="5" class="text-center text-muted">Nenhum componente cadastrado.</td>
           </tr>
           {% endfor %}
         </tbody>

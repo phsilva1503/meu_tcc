@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Estoque</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+
+    <h1 class="text-3xl font-bold mb-6">Controle de Estoque</h1>
+
+    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead class="bg-gray-200">
+            <tr>
+                <th class="py-3 px-6 text-left">Produto</th>
+                <th class="py-3 px-6 text-left">Saldo</th>
+                <th class="py-3 px-6 text-center">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+            <tr class="border-b hover:bg-gray-50">
+                <td class="py-3 px-6">{{ produto.nome }}</td>
+                <td class="py-3 px-6">{{ saldos[produto.id] }}</td>
+                <td class="py-3 px-6 text-center">
+                    <a href="{{ url_for('AdicionarSaldo', produto_id=produto.id) }}" 
+                       class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-3 rounded">
+                       Adicionar saldo
+                    </a>
+                    <a href="{{ url_for('movimentacoes', produto_id=produto.id) }}" 
+                       class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1 px-3 rounded ml-2">
+                       Movimentações
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
