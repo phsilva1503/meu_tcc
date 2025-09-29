@@ -156,7 +156,7 @@ def routes(app):
                 else:
                     estoque.quantidade -= quantidade
 
-                #aQUI GRAVA A MOVIMENTAÇÃO NO BD
+                #AQUI GRAVA A MOVIMENTAÇÃO NO BD
                 mov = Movimentacao(
                     componente_id=componente.id,
                     quantidade=quantidade,

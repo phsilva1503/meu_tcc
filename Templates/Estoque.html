@@ -18,16 +18,16 @@
             </tr>
         </thead>
         <tbody>
-            {% for produto in produtos %}
+            {% for componente in componentes %}
             <tr class="border-b hover:bg-gray-50">
-                <td class="py-3 px-6">{{ produto.nome }}</td>
-                <td class="py-3 px-6">{{ saldos[produto.id] }}</td>
+                <td class="py-3 px-6">{{ componente.nome }}</td>
+                <td class="py-3 px-6">{{ saldos[componente.id] }}</td>
                 <td class="py-3 px-6 text-center">
-                    <a href="{{ url_for('AdicionarSaldo', produto_id=produto.id) }}" 
+                    <a href="{{ url_for('AdicionarSaldo', componente_id=componente.id) }}" 
                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-3 rounded">
                        Adicionar saldo
                     </a>
-                    <a href="{{ url_for('movimentacoes', produto_id=produto.id) }}" 
+                    <a href="{{ url_for('movimentacoes', componente_id=componente.id) }}" 
                        class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1 px-3 rounded ml-2">
                        Movimentações
                     </a>
