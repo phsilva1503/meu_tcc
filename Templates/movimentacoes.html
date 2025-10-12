@@ -9,7 +9,8 @@
 <div class="container mt-5">
     <h2 class="mb-4">Movimentações do Componente: <strong>{{ componente.nome }}</strong></h2>
 
-    <a href="{{ url_for('cadastro_componente', produto_id=componente.id) }}" class="btn btn-secondary mb-3">Voltar ao Estoque</a>
+    <!-- Corrigido: removeu produto_id -->
+    <a href="{{ url_for('cadastro_componente') }}" class="btn btn-secondary mb-3">Voltar ao Estoque</a>
 
     {% if movimentacoes %}
     <table class="table table-striped table-bordered">
