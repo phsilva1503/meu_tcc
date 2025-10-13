@@ -15,3 +15,4 @@ def registrar_rotas_dash(app):
         producoes = Producao.query.order_by(Producao.id.desc()).all()
         componentes = Componente.query.filter_by(ativo=True).all()
         return render_template('dashboard.html', producoes=producoes, componentes=componentes)
+ff
