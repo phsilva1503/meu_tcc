@@ -3,6 +3,7 @@ from models import *
 from datetime import date, datetime
 from sqlalchemy import func, case
 
+
 def routes(app):
 
     # -----------------------
@@ -186,7 +187,8 @@ def routes(app):
     # -----------------------
     @app.route('/controle-producao')
     def controle_producao():
-        producoes = Producao.query.all()
+        ##producoes = Producao.query.all()
+        producoes = Producao.query.order_by(Producao.id.desc()).all()
         componentes = Componente.query.filter_by(ativo=True).all()
         hoje = date.today().strftime('%Y-%m-%d')
         todos_componentes = Componente.query.all()
@@ -307,7 +309,19 @@ def routes(app):
 
     @app.route('/dashboard')
     def dashboard():
-        return render_template('dashboard.html')
+         # Pega todas as produções, do mais recente para o mais antigo
+        producoes = Producao.query.order_by(Producao.id.desc()).all()
+    
+    # Também pode pegar componentes ativos, se quiser mostrar info extra
+        componentes = Componente.query.filter_by(ativo=True).all()
+    
+    # Passa os dados para o template
+        return render_template(
+        'Dash.html',
+        producoes=producoes,
+        componentes=componentes
+        )
+        return render_template('Dash.html')
 
     @app.route('/relatorios')
     def relatorios():

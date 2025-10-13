@@ -3,6 +3,8 @@ from models import *
 from flask_migrate import Migrate
 from routes import routes  # Importa suas rotas definidas
 
+
+
 # -----------------------
 # CONFIGURAÇÃO DO APP
 # -----------------------
